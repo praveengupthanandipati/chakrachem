@@ -14,10 +14,6 @@ li {
   margin: 0;
 }
 
-a {
-  text-decoration: none;
-}
-
 p {
   font-size: clamp(0.85rem, 1vw, 1rem);
 }
@@ -53,8 +49,9 @@ p {
 
 //header styles
 header {
-    
   .navbar-brand {
+    margin: 0;
+    padding: 0;
     img {
       width: 250px;
     }
@@ -62,11 +59,43 @@ header {
   .mainmenu {
     .nav-item {
       .nav-link {
-        font-weight: map-get($font-weights, medium);        
+        font-weight: map-get($font-weights, semibold);
         padding: 0.5rem 1rem;
         cursor: pointer;
-        color:map-get($colors, bodytext);
+        color: map-get($colors, bodytext);
         text-transform: uppercase;
+        border-radius: 5px;
+        text-decoration: none;
+
+        &:hover {
+          background: map-get($colors, primary);
+          color: map-get($colors, white);
+        }
+      }
+      .active {
+        padding: 0.5rem 1rem;
+        display: block;
+        text-transform: uppercase;
+        font-weight: map-get($font-weights, semibold);
+        background: map-get($colors, primary);
+        color: map-get($colors, white);
+        border-radius: 5px;
+        text-decoration: none;
+      }
+    }
+    .dropdown-menu {
+      background: map-get($colors, secondary);
+      border-radius: 0;
+      min-width: 225px;
+      .dropdown-item {
+        cursor: pointer;
+        padding: 10px 15px;
+        font-size: $fsize - 1;
+        color: map-get($colors, white);
+
+        &:hover {
+          color: map-get($colors, secondary);
+        }
       }
     }
   }
@@ -76,7 +105,7 @@ header {
         position: relative;
         padding: 0.5rem 0.7rem;
         cursor: pointer;
-        color:map-get($colors, bodytext);
+        color: map-get($colors, bodytext);
       }
     }
     .icomoon {
@@ -95,6 +124,56 @@ header {
       top: 0;
       right: 0;
       border-radius: 15px;
+    }
+  }
+}
+
+.offcanvas-search {
+  height: 100vh !important;
+
+  .search-section {
+    background: #e9f0fd;
+    padding: 15px 25px;
+    border-radius: 50px;
+    @include box-shadow(1px, 1px, 5px, map-get($colors, lightsecondary));
+
+    input[type="text"] {
+      background: none;
+      border: none;
+      width: 80%;
+      margin-left: 20px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  .categories {
+    a {
+      text-decoration: underline !important;
+      cursor: pointer;
+      color: map-get($colors, black);
+      display: inline-block;
+      margin-right: 20px;
+      font-size: $fsize - 1;
+    }
+  }
+}
+
+.HomeSwiper {
+  .slider-article {
+    position: absolute;
+    top: 50%;
+    right: 10%;
+    width: 25%;
+    transform: translateY(-30%);
+    .slidertitle {
+      font-size: clamp(1.3rem, 2.5vw, 2.5rem);
+      font-weight: map-get($font-weights, light);
+      span {
+        font-weight: map-get($font-weights, bold);
+        color: map-get($colors, secondary);
+      }
     }
   }
 }

@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "../assets/img/logo.svg";
 
 const Header = () => {
+  const [showOffcanvas, setShowOffcanvas] = useState(false);
+
+  const handleCloseOffcanvas = () => setShowOffcanvas(false);
+  const handleShowOffcanvas = () => setShowOffcanvas(true);
   return (
     <div>
       <header>
@@ -40,7 +44,7 @@ const Header = () => {
               <div className="offcanvas-body">
                 <ul className="navbar-nav mx-auto mb-2 mb-lg-0 mainmenu">
                   <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" to="/">
+                    <a className="active" aria-current="page" to="/">
                       Home
                     </a>
                   </li>
@@ -105,7 +109,13 @@ const Header = () => {
                 </ul>
                 <ul className="navbar-nav ms-auto rightnav">
                   <li className="nav-item">
-                    <a className="nav-link" to="/">
+                    <a
+                      className="nav-link"
+                      to=""
+                      data-bs-toggle="offcanvas"
+                      data-bs-target="#searchCanvas"
+                      aria-controls="offcanvasTop"
+                    >
                       <span className="icon-magnifier icomoon"></span>
                     </a>
                   </li>
@@ -126,6 +136,46 @@ const Header = () => {
           </nav>
         </div>
       </header>
+
+      <div
+        className="offcanvas offcanvas-top offcanvas-search"
+        tabindex="-1"
+        id="searchCanvas"
+        aria-labelledby="offcanvasExampleLabel"
+      >
+        <div className="offcanvas-header">
+          <h5 className="offcanvas-title" id="offcanvasExampleLabel">
+            &nbsp;
+          </h5>
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div className="offcanvas-body">
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-md-6">
+                <div className="search-section">                 
+                    <span className="icon-magnifier icomoon"></span>
+                    <input type="text" placeholder="Search the Product name or CAS Number"/>                  
+                </div>
+                <div className="categories pt-4">
+                    <h6 className="text-uppercase font-black font-semibold pb-1">Search by Categories</h6>
+                    <div>
+                        <a href="">Life Sciences</a>
+                        <a href="">API Intermediate</a>
+                        <a href="">Chemical Derivateves</a>
+                        <a href="">Natural Products</a>                        
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
