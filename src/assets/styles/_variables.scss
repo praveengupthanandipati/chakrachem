@@ -1,0 +1,57 @@
+//color variables
+$colors: (
+  black: #000,
+  white: #fff,
+  red: #aa0607,
+  gray: #828282,
+  primary: #306b42,
+  secondary: #001b8c,
+  lightprimary: #d3ffe0,
+  darkprimary: #104a21,
+  lightsecondary: #93a9ff,
+  darksecondary: #001465,
+  lightgray: #e7eefa,
+  lightgradient: (
+    linear-gradient(270deg, #e9defa 0%, rgba(251, 252, 219, 0.5) 100%),
+  ),
+  bodytext: #34323A,
+);
+
+//general variables
+$fsize: 15px;
+
+//devices breakpoints
+$breakpoints: (
+  "xs": 0,
+  "sm": 576px,
+  "md": 768px,
+  "lg": 992px,
+  "xl": 1200px,
+  "xxl": 1400px,
+);
+
+//font weights
+$font-weights: (
+  extralight: 200,
+  light: 300,
+  regular: 400,
+  medium: 500,
+  semibold: 600,
+  bold: 700,
+  extrabold: 800,
+);
+
+@each $weight-name, $weight-value in $font-weights {
+  .font-#{$weight-name} {
+    font-weight: $weight-value;
+  }
+}
+
+@each $color-name, $color-value in $colors {
+  .font-#{$color-name} {
+    color: $color-value;
+  }
+  .background-#{$color-name} {
+    background: $color-value;
+  }
+}

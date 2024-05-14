@@ -1,0 +1,100 @@
+@import "./mixins";
+@import "./variables";
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap");
+
+body {
+  @include siteMain;
+  color: map-get($colors, bodytext);
+}
+
+ul,
+li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+p {
+  font-size: clamp(0.85rem, 1vw, 1rem);
+}
+
+.link {
+  background: transparent;
+  padding: 10px 25px;
+  border-radius: 25px;
+  @include transition(all 0.5s ease);
+  display: inline-block;
+}
+
+.green-btn {
+  @extend .link;
+  background-color: map-get($colors, primary);
+  color: map-get($colors, white);
+
+  &:hover {
+    background-color: darken(map-get($colors, primary), 20%);
+    color: map-get($colors, white);
+  }
+}
+
+.blue-btn {
+  @extend .link;
+  background-color: map-get($colors, secondary);
+  color: map-get($colors, white);
+
+  &:hover {
+    background-color: darken(map-get($colors, secondary), 10%);
+  }
+}
+
+//header styles
+header {
+    
+  .navbar-brand {
+    img {
+      width: 250px;
+    }
+  }
+  .mainmenu {
+    .nav-item {
+      .nav-link {
+        font-weight: map-get($font-weights, medium);        
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        color:map-get($colors, bodytext);
+        text-transform: uppercase;
+      }
+    }
+  }
+  .rightnav {
+    .nav-item {
+      .nav-link {
+        position: relative;
+        padding: 0.5rem 0.7rem;
+        cursor: pointer;
+        color:map-get($colors, bodytext);
+      }
+    }
+    .icomoon {
+      font-size: $fsize + 7;
+    }
+    .cart-number {
+      background: map-get($colors, primary);
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      font-size: $fsize - 4;
+      text-align: center;
+      line-height: 21px;
+      color: map-get($colors, white);
+      position: absolute;
+      top: 0;
+      right: 0;
+      border-radius: 15px;
+    }
+  }
+}
