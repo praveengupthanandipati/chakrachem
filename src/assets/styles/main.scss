@@ -14,8 +14,16 @@ li {
   margin: 0;
 }
 
+a {
+  text-decoration: none;
+  font-weight: map-get($font-weights, regular);
+  cursor: pointer;
+}
+
 p {
   font-size: clamp(0.85rem, 1vw, 1rem);
+  line-height: 175%;
+  font-weight: map-get($font-weights, regular);
 }
 
 .link {
@@ -175,5 +183,168 @@ header {
         color: map-get($colors, secondary);
       }
     }
+  }
+}
+
+.homeAbout {
+  background: #06194b;
+  padding-bottom: 165px;
+  position: relative;
+  z-index: 99;
+  color: map-get($colors, white);
+
+  .row {
+    top: -50px;
+    position: relative;
+  }
+
+  .aboutHighlates {
+    background: map-get($colors, white);
+    padding: 25px 15px;
+    border-bottom: 5px solid map-get($colors, primary);
+    min-height: 50px;
+
+    &__column {
+      h2 {
+        font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+        font-weight: map-get($font-weights, semibold);
+        color: map-get($colors, black);
+
+        span {
+          color: map-get($colors, primary);
+        }
+      }
+      p {
+        font-size: clamp(0.8rem, 1vw, 1rem);
+        font-weight: map-get($font-weights, semibold);
+        color: map-get($colors, black);
+        line-height: 20px;
+      }
+    }
+  }
+  .rightArticle {
+    h6 {
+      color: map-get($colors, white);
+      font-weight: map-get($font-weights, semibold);
+    }
+    h2 {
+      font-size: clamp(1rem, 2.2vw, 2.2rem);
+      font-weight: map-get($font-weights, light);
+
+      span {
+        font-weight: map-get($font-weights, bold);
+      }
+    }
+  }
+}
+
+.HomeCategories {
+  margin-top: -110px;
+  position: relative;
+  z-index: 99;
+  .categoryCol {
+    background: map-get($colors, white);
+    padding: 30px;
+    height: 300px;
+
+    h4 {
+      font-size: clamp(1.1rem, 1.2vw, 1.2rem);
+      font-weight: map-get($font-weights, bold);
+    }
+
+    p {
+      font-size: $fsize - 1;
+    }
+    a {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.ourCulture {
+  background: url(../img/culturebg.jpg) no-repeat 0 0;
+  width: 100%;
+  background-size: cover;
+  min-height: 500px;
+  position: relative;
+  color: map-get($colors, white);
+  margin: 5rem 0 0 0;
+
+  &:before {
+    content: "";
+    width: 60%;
+    height: 100%;
+    background: map-get($colors, darksecondary);
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    opacity: 0.7;
+  }
+  .cultureSection {
+    padding: 65px 0;
+    position: relative;
+    z-index: 999;
+  }
+  .cultureColumn {
+    padding: 35px 0 0 0;
+    position: relative;
+    z-index: 999;
+    &__icon {
+      width: 10%;
+
+      .icomoon {
+        font-size: $fsize * 4;
+        color: map-get($colors, white);
+      }
+    }
+    &__article {
+      width: 80%;
+
+      h6 {
+        text-transform: uppercase;
+        padding-bottom: 5px;
+        font-weight: map-get($font-weights, bold);
+      }
+      p {
+        font-size: $fsize - 1;
+      }
+    }
+  }
+}
+
+.PopularProducts {
+  background-color: #ecf7f6;
+  padding: 4rem 0;
+  margin-bottom: 3rem;
+
+  .productSwiper {
+    padding-bottom: 4rem;
+  }
+}
+
+.productItem {
+  background: map-get($colors, white);
+  border-radius: 15px;
+  text-align: center;
+
+  &__casnumber {
+    background: map-get($colors, lightgray);
+    padding: 13px 0;
+    text-align: center;
+    color: map-get($colors, secondary);
+    font-weight: map-get($font-weights, semibold);
+  }
+  &__image {
+    min-width: 263px;
+    max-width: 263px;
+    height: auto;
+    margin: 0 auto;
+  }
+  &__productName {
+    padding: 25px 15px;
+    text-align: center;
   }
 }

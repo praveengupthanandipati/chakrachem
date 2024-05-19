@@ -119,12 +119,12 @@ const Header = () => {
                       <span className="icon-magnifier icomoon"></span>
                     </a>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item d-none">
                     <a className="nav-link" to="/">
                       <span className="icon-user icomoon"></span>
                     </a>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item d-none">
                     <a className="nav-link" to="/">
                       <span className="icon-cart-bag icomoon"></span>
                       <span className="cart-number">15</span>
