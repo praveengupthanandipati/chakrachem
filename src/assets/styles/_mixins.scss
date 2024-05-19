@@ -26,6 +26,20 @@
   background: linear-gradient($direction, $color-stops);
 }
 
+@mixin verticalcenter {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center; 
+  flex-direction: column;  
+}
+
 //box shadow
 @mixin box-shadow($x-axis: null, $y-axis: null, $blur: null, $color: null) {
   box-shadow: $x-axis $y-axis $blur $color;
