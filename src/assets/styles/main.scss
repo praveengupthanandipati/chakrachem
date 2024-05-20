@@ -385,3 +385,112 @@ header {
     }
   }
 }
+
+footer {
+  margin-top: 25px;
+  .topFooter {
+    background: map-get($colors, darksecondary);
+    padding: 25px 0;
+    color: map-get($colors, white);
+
+    h6 {
+      color: map-get($colors, white);
+      font-weight: map-get($font-weights, semibold);
+      margin: 0;
+      padding: 0 0 5px 0;
+    }
+
+    .addressItem {
+      display: flex;
+      padding: 30px 0 0 0;
+
+      &__icon {
+        width: 50px;
+
+        .icomoon {
+          font-size: $fsize * 2 - 5;
+          color: map-get($colors, primary);
+        }
+      }
+      &__desc {
+        p {
+          font-size: $fsize - 2;
+          line-height: 22px;
+        }
+      }
+    }
+    .footerSocial {
+      display: flex;
+      a {
+        width: 40px;
+        height: 40px;
+        display: inline-block;
+        margin-right: 10px;
+        background-color: map-get($colors, lightblue2);
+        @include verticalcenter;
+        text-align: center;
+        color: map-get($colors, black);
+        border-radius: 50%;
+        @include transition;
+        .icomoon {
+          font-size: $fsize;
+        }
+        &:hover {
+          background: map-get($colors, primary);
+          color: map-get($colors, white);
+        }
+      }
+    }
+
+    .navrow {     
+      .h5 {
+        padding-bottom: 20px;
+        position: relative;
+
+        &:before {
+          content: "";
+          width: 40px;
+          height: 4px;
+          background: map-get($colors, secondary);
+          position: absolute;
+          bottom: 5px;
+          left: 0;
+        }
+      }
+    }
+    .footerNav {
+      color: map-get($colors, white);
+
+      li {
+        padding-bottom: 10px;
+      }
+
+      a.footer-nav-link {
+        color: map-get($colors, white);
+        font-size: $fsize - 2;
+
+        &:hover {
+          color: map-get($colors, secondary);
+        }
+      }
+      .activefooternav {
+        color: map-get($colors, secondary);
+      }
+    }
+  }
+  .bottomFooter {
+    background: map-get($colors, lightblue2);
+    padding: 10px 0;
+
+    a {
+      padding-right: 20px;
+      display: inline-block;
+      color: map-get($colors, darksecondary);
+      font-size: $fsize - 2;      
+      @include transition;
+      &:hover {
+        color: map-get($colors, secondary);
+      }
+    }
+  }
+}
