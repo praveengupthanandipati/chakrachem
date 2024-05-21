@@ -89,27 +89,27 @@ const Footer = () => {
                     <h5 className="h5 fbold">Company</h5>
                     <ul className="footerNav">
                       <li>
-                        <NavLink to="" className="footer-nav-link">
+                        <NavLink to="/" className="footer-nav-link">
                           Home
                         </NavLink>
                       </li>
                       <li>
-                        <NavLink to="" className="footer-nav-link">
+                        <NavLink to="/About" className="footer-nav-link">
                           About
                         </NavLink>
                       </li>
                       <li>
-                        <NavLink to="" className="footer-nav-link">
+                        <NavLink to="/Services" className="footer-nav-link">
                           Services
                         </NavLink>
                       </li>                     
                       <li>
-                        <NavLink to="" className="footer-nav-link">
+                        <NavLink to="/Careers" className="footer-nav-link">
                           Career
                         </NavLink>
                       </li>
                       <li>
-                        <NavLink to="" className="footer-nav-link">
+                        <NavLink to="/Contact" className="footer-nav-link">
                           Contact
                         </NavLink>
                       </li>
