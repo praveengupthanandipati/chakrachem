@@ -1,8 +1,29 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import ScrollToTop from "./ScrollToTop";
 
 const Footer = () => {
+  //on click browser move to top
+  const [isScrolled, setIsScrolled] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 0);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <footer>
+      {isScrolled && (
+        <div className="scroll-to-top" onClick={ScrollToTop}>
+          <NavLink>
+            <span class="icon-uparrow icomoon"> </span>
+          </NavLink>
+        </div>
+      )}
       <section className="footer">
         <section className="topFooter">
           <div className="container">
@@ -51,15 +72,15 @@ const Footer = () => {
                   </div>
                 </div>
                 <div className="footerSocial">
-                  <a href="javascript:void(0)">
+                  <NavLink to=" ">
                     <span className="icon-facebook icomoon"></span>
-                  </a>
-                  <a href="javascript:void(0)">
+                  </NavLink>
+                  <NavLink to=" ">
                     <span className="icon-linkedin icomoon"></span>
-                  </a>
-                  <a href="javascript:void(0)">
+                  </NavLink>
+                  <NavLink to=" ">
                     <span className="icon-twitter icomoon"></span>
-                  </a>
+                  </NavLink>
                 </div>
               </div>
               <div className="col-md-5">
@@ -68,34 +89,29 @@ const Footer = () => {
                     <h5 className="h5 fbold">Company</h5>
                     <ul className="footerNav">
                       <li>
-                        <a to="" className="footer-nav-link">
+                        <NavLink to="" className="footer-nav-link">
                           Home
-                        </a>
+                        </NavLink>
                       </li>
                       <li>
-                        <a to="" className="footer-nav-link">
+                        <NavLink to="" className="footer-nav-link">
                           About
-                        </a>
+                        </NavLink>
                       </li>
                       <li>
-                        <a to="" className="footer-nav-link">
+                        <NavLink to="" className="footer-nav-link">
                           Services
-                        </a>
-                      </li>
+                        </NavLink>
+                      </li>                     
                       <li>
-                        <a to="" className="footer-nav-link">
-                          Blog
-                        </a>
-                      </li>
-                      <li>
-                        <a to="" className="footer-nav-link">
+                        <NavLink to="" className="footer-nav-link">
                           Career
-                        </a>
+                        </NavLink>
                       </li>
                       <li>
-                        <a to="" className="footer-nav-link">
+                        <NavLink to="" className="footer-nav-link">
                           Contact
-                        </a>
+                        </NavLink>
                       </li>
                     </ul>
                   </div>
@@ -103,29 +119,29 @@ const Footer = () => {
                     <h5 className="h5 fbold">Products</h5>
                     <ul className="footerNav">
                       <li>
-                        <a to="" className="footer-nav-link">
+                        <NavLink to="" className="footer-nav-link">
                           Fine Chemicals
-                        </a>
+                        </NavLink>
                       </li>
                       <li>
-                        <a to="" className="footer-nav-link">
+                        <NavLink to="" className="footer-nav-link">
                           Coumarin - Chalcones
-                        </a>
+                        </NavLink>
                       </li>
                       <li>
-                        <a to="" className="footer-nav-link">
+                        <NavLink to="" className="footer-nav-link">
                           API Intermediate
-                        </a>
+                        </NavLink>
                       </li>
                       <li>
-                        <a to="" className="footer-nav-link">
+                        <NavLink to="" className="footer-nav-link">
                           Natural Products
-                        </a>
+                        </NavLink>
                       </li>
                       <li>
-                        <a to="" className="footer-nav-link">
+                        <NavLink to="" className="footer-nav-link">
                           Flavones & Flavanones
-                        </a>
+                        </NavLink>
                       </li>
                     </ul>
                   </div>
@@ -140,8 +156,8 @@ const Footer = () => {
             <div className="row">
               <div className="col-md-6">
                 <p className="d-flex m-0 p-0">
-                  <a to="">Terms & Conditions</a>
-                  <a to="">Privacy Policy</a>
+                  <NavLink to="Terms">Terms & Conditions</NavLink>
+                  {/* <NavLink to="">Privacy Policy</NavLink> */}
                 </p>
               </div>
               <div className="col-md-6 text-md-end">

@@ -1,4 +1,5 @@
 import React from "react";
+import scrollToTop from "../includes/ScrollToTop";
 import HomeBanner from "../components/HomeBanner";
 import HomeHighlet from "../components/HomeHighlet";
 import HomeCatItem from "../components/HomeCatItem";
@@ -7,6 +8,7 @@ import HomeAboutImg from "../assets/img/abouthome.jpg";
 import MetricImage from "../assets/img/metricimg.jpg";
 
 const Home = () => {
+  scrollToTop(); //page load move top
   let homeTitle = "ABOUT CHAKRACHEM";
   let HomeAboutDesc =
     "Our purpose is to solve the toughest problems in life science by collaborating with the global scientific community. ChakraChem is specialized in the process development and the manufacturing of complex organic molecules as active pharmaceutical ingredients (APIs), as well as innovative products for research purposes.";
@@ -164,25 +166,52 @@ const Home = () => {
 
         {/* From Milligrams to Metric Tons */}
         <section className="metriTones">
-            <div className="container-fluid g-0">
-                <div className="row g-0">
-                    <div className="col-lg-6">
-                        <img src={MetricImage} alt="" className="img-fluid w-100"/>
-                    </div>
-                    <div className="col-lg-6 metriTones__rightSection">
-                       <article className="p-2 p-md-5">
-                        <h3 className="h2 fsbold text-upperase pb-4">From Milligrams to Metric Tons</h3>
-                        <ul className="list-items">
-                            <li>Chakra chem's mission is to be the leading life sciences platform for scientists developing revolutionary medicines and diagnostics.</li>
-                            <li> We are the experts in complex chemistry to secure life sciences supply chains with quality products.</li>
-                            <li> We are at the interface of chemistry and biology, science-led and customer focused across products, services and R&D innovation.</li>
-                            <li>We have facilities across three continents and a rapid global distribution network. Our main manufacturing laboratories are in Switzerland, the United Kingdom, Slovakia and China, with peptide and antibody production in the USA.</li>
-                            <li> Our R&D resources and production facilities are modern and versatile, allowing us to produce chemicals on the milligram to ton scale, and at ISO 9001 and GMP, with peptides at mg to multikilogram scale.</li>
-                        </ul>
-                       </article>
-                    </div>
-                </div>
+          <div className="container-fluid g-0">
+            <div className="row g-0">
+              <div className="col-lg-6">
+                <img src={MetricImage} alt="" className="img-fluid w-100" />
+              </div>
+              <div className="col-lg-6 metriTones__rightSection">
+                <article className="p-2 p-md-5">
+                  <h3 className="h2 fsbold text-upperase pb-4">
+                    From Milligrams to Metric Tons
+                  </h3>
+                  <ul className="list-items">
+                    <li>
+                      Chakra chem's mission is to be the leading life sciences
+                      platform for scientists developing revolutionary medicines
+                      and diagnostics.
+                    </li>
+                    <li>
+                      {" "}
+                      We are the experts in complex chemistry to secure life
+                      sciences supply chains with quality products.
+                    </li>
+                    <li>
+                      {" "}
+                      We are at the interface of chemistry and biology,
+                      science-led and customer focused across products, services
+                      and R&D innovation.
+                    </li>
+                    <li>
+                      We have facilities across three continents and a rapid
+                      global distribution network. Our main manufacturing
+                      laboratories are in Switzerland, the United Kingdom,
+                      Slovakia and China, with peptide and antibody production
+                      in the USA.
+                    </li>
+                    <li>
+                      {" "}
+                      Our R&D resources and production facilities are modern and
+                      versatile, allowing us to produce chemicals on the
+                      milligram to ton scale, and at ISO 9001 and GMP, with
+                      peptides at mg to multikilogram scale.
+                    </li>
+                  </ul>
+                </article>
+              </div>
             </div>
+          </div>
         </section>
       </main>
     </div>

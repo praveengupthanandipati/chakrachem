@@ -7,6 +7,15 @@ body {
   color: map-get($colors, bodytext);
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
 ul,
 li {
   list-style: none;
@@ -19,7 +28,7 @@ li {
     padding-left: 15px;
     position: relative;
     font-size: $fsize - 1;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 
     &:before {
       content: "";
@@ -74,13 +83,25 @@ p {
   }
 }
 
+.fixed-top-nav {
+  @include box-shadow(2px, 2px, 15px, map-get($colors, gray));
+  .navbar-brand {
+    img {
+      width: 185px;
+    }
+  }
+}
+
 //header styles
 header {
+  background: map-get($colors, white);
+
   .navbar-brand {
     margin: 0;
     padding: 0;
     img {
       width: 250px;
+      @include transition(all, 0.5s, ease);
     }
   }
   .mainmenu {
@@ -387,10 +408,33 @@ header {
 }
 
 footer {
+  .scroll-to-top {
+    right: 0;
+    bottom: 50px;
+    position: fixed;
+    z-index: 999;
+
+    a {
+      width: 40px;
+      height: 40px;
+      background: map-get($colors, white);
+      text-align: center;
+      border-radius: 50%;
+      line-height: 150%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+
+      .icomoon {
+        font-size: 1rem;
+      }
+    }
+  }
   margin-top: 25px;
   .topFooter {
     background: map-get($colors, darksecondary);
-    padding: 25px 0;
+    padding: 4rem 0;
     color: map-get($colors, white);
 
     h6 {
@@ -409,7 +453,7 @@ footer {
 
         .icomoon {
           font-size: $fsize * 2 - 5;
-          color: map-get($colors, primary);
+          color: map-get($colors, primarylight);
         }
       }
       &__desc {
@@ -436,13 +480,13 @@ footer {
           font-size: $fsize;
         }
         &:hover {
-          background: map-get($colors, primary);
+          background: map-get($colors, primarylight);
           color: map-get($colors, white);
         }
       }
     }
 
-    .navrow {     
+    .navrow {
       .h5 {
         padding-bottom: 20px;
         position: relative;
@@ -451,7 +495,7 @@ footer {
           content: "";
           width: 40px;
           height: 4px;
-          background: map-get($colors, secondary);
+          background: map-get($colors, primarylight);
           position: absolute;
           bottom: 5px;
           left: 0;
@@ -470,7 +514,7 @@ footer {
         font-size: $fsize - 2;
 
         &:hover {
-          color: map-get($colors, secondary);
+          color: map-get($colors, primarylight);
         }
       }
       .activefooternav {
@@ -486,11 +530,114 @@ footer {
       padding-right: 20px;
       display: inline-block;
       color: map-get($colors, darksecondary);
-      font-size: $fsize - 2;      
+      font-size: $fsize - 2;
       @include transition;
       &:hover {
-        color: map-get($colors, secondary);
+        color: map-get($colors, primarylight);
       }
     }
+  }
+}
+
+.breadCrumb {
+  display: flex;
+  flex-wrap: wrap;
+
+  li {
+    &:first-child {
+      a {
+        &:before {
+          content: "";
+        }
+      }
+    }
+    a {
+      color: map-get($colors, white);
+      position: relative;
+      font-size: $fsize - 2;
+
+      &:before {
+        content: "\e904";
+        font-family: "icomoon" !important;
+        font-size: $fsize - 3;
+        padding: 0 10px;
+      }
+    }
+    .active {
+      color: map-get($colors, white);
+    }
+  }
+}
+
+.subpageMain {
+  min-height: 800px;
+  padding-top: 5rem;
+  .subpageHeader {
+    background: map-get($colors, darksecondary);
+    padding: 25px 0;
+
+    h1 {
+      font-size: clamp(1rem, 1.5vw, 1.5rem);
+      color: map-get($colors, white);
+      span {
+        font-weight: map-get($font-weights, semibold);
+      }
+    }
+  }
+  .subPageBody {
+    min-height: 500px;
+    padding: 4rem 0;
+    h2 {
+      font-size: clamp(1.2rem, 1.6vw, 1.6rem);
+      font-weight: map-get($font-weights, light);
+
+      span {
+        font-weight: map-get($font-weights, bold);
+      }
+    }
+    h6 {
+      color: map-get($colors, primarylight);
+    }
+
+    p {
+      font-size: $fsize;
+      line-height: 28px;
+      padding-bottom: 20px;
+      margin: 0;
+    }
+  }
+}
+
+.form-floating {
+  label {
+    font-size: $fsize - 1;
+  }
+  .form-control {
+    font-size: $fsize - 1;
+    border-radius: 0;
+    &:focus {
+      box-shadow: none;
+    }
+  }
+  .form-select {
+    font-size: $fsize - 1;
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}
+
+.contactDetails {
+  background: map-get($colors, darksecondary);
+  height: 100%;
+  color: map-get($colors, white);
+
+  .icomoon {
+    font-size: $fsize * 2;
+  }
+
+  .contactMap {
+    width: 100%;
   }
 }
