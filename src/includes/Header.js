@@ -109,7 +109,7 @@ const Header = () => {
                       <li>
                         <NavLink
                           className="dropdown-item"
-                          to=" "
+                          to="/Products"
                           onClick={closeOffcanvas}
                         >
                           Life Sciences
