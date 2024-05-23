@@ -6,6 +6,7 @@ import HomeCatItem from "../components/HomeCatItem";
 import HomeProducts from "../components/HomeProducts";
 import HomeAboutImg from "../assets/img/abouthome.jpg";
 import MetricImage from "../assets/img/metricimg.jpg";
+import { NavLink } from "react-router-dom";
 
 const Home = () => {
   scrollToTop(); //page load move top
@@ -72,9 +73,9 @@ const Home = () => {
                 </h2>
                 <p className="pb-3">{HomeAboutDesc}</p>
                 <p>
-                  <a to="" className="button green-btn float-start">
+                  <NavLink to="/About" className="button green-btn float-start">
                     Read More About Chakra Chem
-                  </a>
+                  </NavLink>
                 </p>
               </div>
             </div>
@@ -183,12 +184,10 @@ const Home = () => {
                       and diagnostics.
                     </li>
                     <li>
-                      {" "}
                       We are the experts in complex chemistry to secure life
                       sciences supply chains with quality products.
                     </li>
                     <li>
-                      {" "}
                       We are at the interface of chemistry and biology,
                       science-led and customer focused across products, services
                       and R&D innovation.
@@ -201,7 +200,6 @@ const Home = () => {
                       in the USA.
                     </li>
                     <li>
-                      {" "}
                       Our R&D resources and production facilities are modern and
                       versatile, allowing us to produce chemicals on the
                       milligram to ton scale, and at ISO 9001 and GMP, with
