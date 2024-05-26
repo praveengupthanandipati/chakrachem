@@ -8,6 +8,8 @@ import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
 import Terms from "./pages/Terms";
 import Products from "./pages/Products";
+import ProductsList from "./pages/ProductsList";
+import ProductDetail from "./pages/ProductDetail";
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
           <Route exact path="Contact" Component={Contact} />
           <Route exact path="Terms" Component={Terms}/>
           <Route exact path="Products" Component={Products}/>
+          <Route exact path = "ProductsList" Component={ProductsList}/>
+          <Route exact path = "ProductDetail" Component={ProductDetail}/>
         </Routes>
         <Footer />
       </BrowserRouter>
