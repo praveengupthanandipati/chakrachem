@@ -30,7 +30,17 @@ const Products = () => {
       </section>
       <section className="subPageBody">
         <div className="container">
-            <p>Page Under Construction</p>
+          <div className="category-list-items">
+            <NavLink to="/ProductsList">Heterocyclic Building Blocks</NavLink>
+            <NavLink to="/ProductsList">Organic Building Blocks</NavLink>
+            <NavLink to="/ProductsList">Catalysis Chemistry</NavLink>
+            <NavLink to="/ProductsList">Asymmetric Synthesis</NavLink>
+            <NavLink to="/ProductsList">Organometallic Reagents</NavLink>
+            <NavLink to="/ProductsList">Synthetic Reagents</NavLink>
+            <NavLink to="/ProductsList">Specialty Synthesis</NavLink>
+            <NavLink to="/ProductsList">Stains and Dyes</NavLink>
+            <NavLink to="/ProductsList">Chemical Biology</NavLink>
+          </div>
         </div>
       </section>
     </main>
