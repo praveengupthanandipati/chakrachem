@@ -368,6 +368,19 @@ header {
   background: map-get($colors, white);
   border-radius: 15px;
   text-align: center;
+  position: relative;
+
+  &__Weight {
+    background: map-get($colors, primarylight);
+    display: inline-block;
+    padding: 2px 5px;
+    color: map-get($colors, white);
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: $fsize - 2;
+    z-index: 999;
+  }
 
   &__casnumber {
     background: map-get($colors, lightgray);
@@ -387,11 +400,16 @@ header {
     overflow: hidden;
   }
   &__productName {
-    padding: 25px 15px;
+    padding: 10px 15px;
     text-align: center;
     a {
       color: map-get($colors, black);
     }
+  }
+
+  &__currency {
+    font-family: Arial, Helvetica, sans-serif;
+    color: map-get($colors, primarylight);
   }
 
   &:hover {
@@ -402,8 +420,7 @@ header {
       color: map-get($colors, primary);
     }
     .productItem__casnumber {
-      background: map-get($colors, primary);
-      color: map-get($colors, white);
+      background: map-get($colors, lightgray);
     }
   }
 }
@@ -591,6 +608,10 @@ footer {
   }
 }
 
+.inr {
+  font-family: Arial;
+}
+
 .subpageMain {
   min-height: 800px;
   padding-top: 5rem;
@@ -691,6 +712,24 @@ footer {
       font-weight: map-get($font-weights, semibold);
     }
   }
+  .Synonyms {
+    a {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  .productDetailSpecp {
+    font-size: $fsize - 2 !important;
+    color: #9f9f9f;
+
+    .valueProduct {
+      color: map-get($colors, secondary);
+      padding-left: 10px;
+      display: inline-block;
+      font-weight: map-get($font-weights, semibold);
+    }
+  }
 }
 
 .related-categories {
@@ -715,4 +754,44 @@ footer {
 .productDetailFigure {
   border: 1px solid map-get($colors, lightgray);
   padding: 25px;
+}
+
+.counter {
+  display: flex;
+  width: 100px;
+
+  button {
+    padding: 5px 10px;
+    margin: -1px;
+    cursor: pointer;
+    border: none;
+    height: 35px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+
+    &:first-child {
+      border-left: 1px solid #ddd;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+    &:last-child {
+      border-right: 1px solid #ddd;
+      border-left: 1px solid #ddd;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+  }
+  input {   
+    text-align: center;
+    width: 40px;
+    height: 35px;
+    border: none;
+    border: 1px solid #ddd;
+    margin-top: -1px;
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
 }

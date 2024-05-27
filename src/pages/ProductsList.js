@@ -16,74 +16,98 @@ const ProductsList = () => {
     {
       id: 1,
       ImageName: product01,
+      Weight: "500 Grams",
       CasNumber: "615-94-1",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
+      ProductName: `7-hydroxycoumarin`,
+      Price: "18,500",
     },
     {
       id: 2,
       ImageName: product02,
+      Weight: "200 Grams",
       CasNumber: "615-94-1",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
+      ProductName: `3-Acetylcoumarin`,
+      Price: "28,500",
     },
     {
       id: 3,
       ImageName: product03,
+      Weight: "50 Grams",
       CasNumber: "82671-06-5",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
+      ProductName: `6-Bromo-4-hydroxycoumarin`,
+      Price: "25,650",
     },
     {
       id: 4,
       ImageName: product04,
+      Weight: "60 Grams",
       CasNumber: "608-31-1",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
+      ProductName: `7-Amino-4-methylcoumarin`,
+      Price: "78,500",
     },
     {
       id: 5,
       ImageName: product05,
+      Weight: "500 Grams",
       CasNumber: "3392-97-0",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
+      ProductName: `7-Diethylamino-4-methylco...`,
+      Price: "7,850",
     },
     {
       id: 6,
       ImageName: product06,
+      Weight: "750 Grams",
       CasNumber: "3430-21-5",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
+      ProductName: `7-Hydroxy-4-(trifluoromet...`,
+      Price: "35,000",
     },
     {
       id: 7,
       ImageName: product07,
+      Weight: "500 Grams",
       CasNumber: "5154-00-7",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
+      ProductName: `7-Methylcoumarin`,
+      Price: "32,000",
     },
     {
       id: 8,
       ImageName: product01,
+      Weight: "200 Grams",
       CasNumber: "1501185-00-7",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
+      ProductName: `Coumestrol`,
+      Price: "42,000",
     },
     {
-      id: 1,
+      id: 9,
       ImageName: product01,
+      Weight: "250 Grams",
       CasNumber: "615-94-1",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
+      ProductName: `4-Hydroxylthiocoumarin`,
+      Price: "45,000",
     },
     {
-      id: 2,
+      id: 10,
       ImageName: product02,
+      Weight: "400 Grams",
       CasNumber: "615-94-1",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
+      ProductName: `N-Succinimidyl 7-Hydroxy..`,
+      Price: " 58,000",
     },
     {
-      id: 3,
+      id: 11,
       ImageName: product03,
+      Weight: "100 Grams",
       CasNumber: "82671-06-5",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
+      ProductName: `8-Bromo-6-Chloro-3-Cyano..`,
+      Price: "250,000",
     },
     {
-      id: 4,
+      id: 12,
       ImageName: product04,
+      Weight: "500 Grams",
       CasNumber: "608-31-1",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
+      ProductName: `8-Acetyl-7-hydroxy-2H-chr..`,
+      Price: "89,501",
     },
   ];
   return (
@@ -118,6 +142,7 @@ const ProductsList = () => {
             {ProductItem.map((item) => (
               <div className="col-md-3" key={item.id}>
                 <div className="productItem shadow mb-3">
+                  <span className="productItem__Weight">{item.Weight}</span>
                   <NavLink to="/ProductDetail">
                     <img
                       src={item.ImageName}
@@ -129,6 +154,10 @@ const ProductsList = () => {
                   <div className="productItem__productName">
                     <NavLink to="/ProductDetail">{item.ProductName}</NavLink>
                   </div>
+                  <p className="text-center font-semibold font-primarylight">
+                    <span class="productItem__currency">₹</span>
+                    {item.Price}
+                  </p>
                 </div>
               </div>
             ))}
