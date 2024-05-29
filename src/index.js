@@ -9,6 +9,7 @@ import "./assets/styles/main.scss";
 //import swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
+import "./Admin/styles/admin.scss";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
