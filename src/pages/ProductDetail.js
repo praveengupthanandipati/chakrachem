@@ -4,6 +4,7 @@ import scrollToTop from "../includes/ScrollToTop";
 import product01 from "../assets/img/products/1702205754.png";
 import Picto from "../assets/img/GHS07.png";
 import Counter from "../includes/Counter";
+import HomeProducts from "../components/HomeProducts";
 
 const ProductDetail = () => {
   scrollToTop(); //page load move top
@@ -18,6 +19,9 @@ const ProductDetail = () => {
     { CategoryItem: "Specialty Synthesis" },
     { CategoryItem: "Stains and Dyes" },
   ];
+  const textareHeight = {
+    height: "100px",
+  };
 
   return (
     <main className="subpageMain ProductDetail">
@@ -297,7 +301,7 @@ const ProductDetail = () => {
                       <div className="sectionListItem">
                         <dt>Purity / Analysis Method</dt>
                         <dd>
-                          <span>></span> NLT 98 %
+                          <span class="icon-rightarrow3"></span> NLT 98 %
                         </dd>
                       </div>
                     </div>
@@ -531,9 +535,15 @@ const ProductDetail = () => {
               </div>
             </div>
 
+            {/* Recommended Products */}
+            <div className="recommend-products">
+              <h4>Recommended Products</h4>
+              <HomeProducts />
+            </div>
+
             {/*Related Categories */}
-            <div className="col-md-12 related-categories mt-5">
-              <div className="card mt-5">
+            <div className="col-md-12 related-categories">
+              <div className="card">
                 <div className="card-header p-3">
                   <h5 className="card-title mb-0 pb-0">Related Categories</h5>
                 </div>
@@ -552,28 +562,92 @@ const ProductDetail = () => {
         </div>
       </section>
       <div
-        class="offcanvas offcanvas-end"
+        className="offcanvas offcanvas-end"
         tabindex="-1"
         id="requestBulkOrder"
         aria-labelledby="offcanvasRightLabel"
       >
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title font-semibold" id="offcanvasRightLabel">
+        <div className="offcanvas-header">
+          <h5
+            className="offcanvas-title font-semibold"
+            id="offcanvasRightLabel"
+          >
             Request Bulk Order
           </h5>
           <button
             type="button"
-            class="btn-close"
+            className="btn-close"
             data-bs-dismiss="offcanvas"
             aria-label="Close"
           ></button>
         </div>
-        <div class="offcanvas-body">
-          <h5>{pageName}</h5>
-          <div className="row">
-            <div className="col-md-6"></div>
-            <div className="col-md-6"></div>
-          </div>
+        <div className="offcanvas-body">
+          <h5 className="text-center">{pageName}</h5>
+
+          <form className="requestbuilk-form">
+            <div className="form-floating mb-3">
+              <input
+                type="text"
+                className="form-control"
+                id="Company"
+                placeholder="Company Name"
+              />
+              <label for="Company">Company Name</label>
+            </div>
+            <div className="form-floating mb-3">
+              <input
+                type="text"
+                className="form-control"
+                id="Contact"
+                placeholder="Contact Name"
+              />
+              <label for="Contact">Contact Name</label>
+            </div>
+            <div className="form-floating mb-3">
+              <input
+                type="email"
+                className="form-control"
+                id="Email"
+                placeholder="Official Email"
+              />
+              <label for="Email">Official Email</label>
+            </div>
+            <div className="form-floating mb-3">
+              <input
+                type="number"
+                className="form-control"
+                id="Phone"
+                placeholder="Phone or Mobile"
+              />
+              <label for="Phone">Phone or Mobile</label>
+            </div>
+            <div className="form-floating mb-3">
+              <input
+                type="number"
+                className="form-control"
+                id="Quantity"
+                placeholder="Quantity"
+              />
+              <label for="Quantity">Quantity</label>
+            </div>
+            <div className="form-floating">
+              <textarea
+                className="form-control"
+                placeholder="Message"
+                id="msg"
+                style={textareHeight}
+              ></textarea>
+              <label for="msg">Comments</label>
+            </div>
+            <button
+              className="green-btn border-0 w-100 mt-4"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#requestBulkOrder"
+              aria-controls="offcanvasRight"
+            >
+              Send Bulk Request
+            </button>
+          </form>
         </div>
       </div>
     </main>
