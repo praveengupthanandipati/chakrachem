@@ -827,3 +827,28 @@ footer {
     padding: 20px;
   }
 }
+
+.list-item-detail {
+  margin-bottom: 25px;
+
+  h6 {
+    font-size: $fsize;
+    padding-bottom: 10px;
+    font-weight: map-get($font-weights, semibold);
+  }
+  p {
+    font-size: $fsize - 2;
+  }
+}
+
+.requestbuilk-form{
+  padding-top:3rem;
+}
+
+.recommend-products{
+  padding:3rem 0;
+
+  .swiper-horizontal{
+    padding:50px 0;
+  }
+}
