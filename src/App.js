@@ -10,6 +10,7 @@ import Terms from "./pages/Terms";
 import Products from "./pages/Products";
 import ProductsList from "./pages/ProductsList";
 import ProductDetail from "./pages/ProductDetail";
+import Login from "./Admin/pages/login";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route exact path="Products" Component={Products}/>
           <Route exact path = "ProductsList" Component={ProductsList}/>
           <Route exact path = "ProductDetail" Component={ProductDetail}/>
+          <Route exact path = "Admin" Component={Login}/>
         </Routes>
         <Footer />
       </BrowserRouter>
