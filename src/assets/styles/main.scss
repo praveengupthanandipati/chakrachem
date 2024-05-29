@@ -781,7 +781,7 @@ footer {
       border-bottom-right-radius: 10px;
     }
   }
-  input {   
+  input {
     text-align: center;
     width: 40px;
     height: 35px;
@@ -793,5 +793,37 @@ footer {
       outline: none;
       box-shadow: none;
     }
+  }
+}
+
+.tab-information {
+  margin-top: 2rem;
+  .nav-link {
+    color: map-get($colors, black);
+  }
+}
+
+.sectionListItem {
+  padding-bottom: 15px;
+  font-size: $fsize - 1;
+
+  dt {
+    color: #9f9f9f;
+    font-weight: map-get($font-weights, semibold);
+  }
+  dd {
+    color: map-get($colors, secondary);
+    padding-top: 10px;
+    font-weight: map-get($font-weights, semibold);
+  }
+}
+
+.product-statements-table {
+  width: 600px;
+
+  th,
+  td {
+    vertical-align: top;
+    padding: 20px;
   }
 }
