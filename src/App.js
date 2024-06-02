@@ -11,25 +11,122 @@ import Products from "./pages/Products";
 import ProductsList from "./pages/ProductsList";
 import ProductDetail from "./pages/ProductDetail";
 import Login from "./Admin/pages/login";
+import AdminLayout from "./Admin/AdminLayout";
+import AdminHeader from "./Admin/AdminHeader";
+import AdminFooter from "./Admin/AdminFooter";
+import AdminDashboard from "./Admin/pages/AdminDashboard"; 
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Header />
         <Routes>
-          <Route exact path="/" Component={Home} />
-          <Route exact path="About" Component={About} />
-          <Route exact path="Services" Component={Services} />
-          <Route exact path="Careers" Component={Careers} />
-          <Route exact path="Contact" Component={Contact} />
-          <Route exact path="Terms" Component={Terms}/>
-          <Route exact path="Products" Component={Products}/>
-          <Route exact path = "ProductsList" Component={ProductsList}/>
-          <Route exact path = "ProductDetail" Component={ProductDetail}/>
-          <Route exact path = "Admin" Component={Login}/>
+          <Route
+            path="/"
+            element={
+              <>
+                <Header />
+                <Home />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="About"
+            element={
+              <>
+                <Header />
+                <About />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="Services"
+            element={
+              <>
+                <Header />
+                <Services />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="Careers"
+            element={
+              <>
+                <Header />
+                <Careers />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="Contact"
+            element={
+              <>
+                <Header />
+                <Contact />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="Terms"
+            element={
+              <>
+                <Header />
+                <Terms />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="Products"
+            element={
+              <>
+                <Header />
+                <Products />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="ProductsList"
+            element={
+              <>
+                <Header />
+                <ProductsList />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="ProductDetail"
+            element={
+              <>
+                <Header />
+                <ProductDetail />
+                <Footer />
+              </>
+            }
+          />
+
+          <Route
+            path="Admin"
+            element={<Login />}
+          />
+          <Route
+            path="Admin/Dashboard"
+            element={
+              <AdminLayout>
+                <AdminHeader />
+                <AdminDashboard />
+                <AdminFooter />
+              </AdminLayout>
+            }
+          />
         </Routes>
-        <Footer />
       </BrowserRouter>
     </div>
   );
