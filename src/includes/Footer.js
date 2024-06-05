@@ -71,7 +71,7 @@ const Footer = () => {
                     </div>
                   </div>
                 </div>
-                <div className="footerSocial">
+                <div className="footerSocial mb-3 mb-md-0">
                   <NavLink to=" ">
                     <span className="icon-facebook icomoon"></span>
                   </NavLink>

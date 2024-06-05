@@ -38,7 +38,7 @@ const Services = () => {
               <img src={Service01Img} alt="" className="img-fluid w-100" />
             </div>
             <div className="col-md-6 align-self-center">
-              <h6>Synthetic Chemistry</h6>
+              <h6 className="pt-2">Synthetic Chemistry</h6>
               <h2 className="pb-3">
                 Discovery <span> Services.</span>
               </h2>
@@ -59,7 +59,7 @@ const Services = () => {
               <img src={Service02Img} alt="" className="img-fluid w-100" />
             </div>
             <div className="col-md-6 align-self-center">
-              <h6>Synthetic Chemistry</h6>
+              <h6 className="pt-2">Synthetic Chemistry</h6>
               <h2 className="pb-3">
                 Development <span> Services.</span>
               </h2>
@@ -81,7 +81,7 @@ const Services = () => {
               <img src={Service03Img} alt="" className="img-fluid w-100" />
             </div>
             <div className="col-md-6 align-self-center">
-              <h2 className="pb-3">
+              <h2 className="py-3">
                 Natural <span> Products.</span>
               </h2>
               <p>

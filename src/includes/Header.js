@@ -34,7 +34,7 @@ const Header = () => {
 
   return (
     <div>
-      <header className={isScrolled ? "fixed-top-nav fixed-top" : "fixed-top"}>
+      <header className={isScrolled ? "fixed-top header-top" : "header-top"}>
         <div className="container">
           <nav className="navbar navbar-expand-lg navbar-light">
             <NavLink className="navbar-brand" to="/" onClick={closeOffcanvas}>
