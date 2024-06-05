@@ -89,7 +89,7 @@ const Contact = () => {
                 </button>
               </form>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 my-5 my-md-0">
               <div className="contactDetails py-4 px-5 rounded">
                 <h3 className="h3 font-bold">Contact Details</h3>
                 <p>For customer support and Query, Get in touch with us.</p>

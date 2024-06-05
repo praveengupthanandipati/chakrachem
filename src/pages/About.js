@@ -56,7 +56,7 @@ const About = () => {
               <img src={AboutImage} alt="" className="img-fluid w-100" />
             </div>
             <div className="col-md-6">
-              <h2 className="pb-3">
+              <h2 className="py-3">
                 Efficient Product <span> Search Engine.</span>
               </h2>
               <p>

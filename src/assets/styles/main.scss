@@ -83,7 +83,7 @@ p {
   }
 }
 
-.fixed-top-nav {
+.fixed-top {
   @include box-shadow(2px, 2px, 15px, map-get($colors, gray));
   .navbar-brand {
     img {
@@ -102,6 +102,10 @@ header {
     img {
       width: 250px;
       @include transition(all, 0.5s, ease);
+
+      @include max(map-get($breakpoints, "lg")) {
+        width: 175px;
+      }
     }
   }
   .mainmenu {
@@ -215,6 +219,11 @@ header {
     right: 10%;
     width: 25%;
     transform: translateY(-30%);
+
+    @include max(map-get($breakpoints, "md")) {
+      width: 40%;
+      top: 40%;
+    }
     .slidertitle {
       font-size: clamp(1.3rem, 2.5vw, 2.5rem);
       font-weight: map-get($font-weights, light);
@@ -236,6 +245,10 @@ header {
   .row {
     top: -50px;
     position: relative;
+
+    @include max(map-get($breakpoints, "lg")) {
+      top: 25px;
+    }
   }
 
   .aboutHighlates {
@@ -263,6 +276,9 @@ header {
     }
   }
   .rightArticle {
+    @include max(map-get($breakpoints, "md")) {
+      padding-top: 25px;
+    }
     h6 {
       color: map-get($colors, white);
       font-weight: map-get($font-weights, semibold);
@@ -615,6 +631,10 @@ footer {
 .subpageMain {
   min-height: 800px;
   padding-top: 5rem;
+
+  @include max(map-get($breakpoints, "md")) {
+    padding-top: 2rem;
+  }
   .subpageHeader {
     background: map-get($colors, darksecondary);
     padding: 25px 0;
@@ -630,6 +650,11 @@ footer {
   .subPageBody {
     min-height: 500px;
     padding: 4rem 0;
+
+    @include max(map-get($breakpoints, "md")) {
+      padding: 2rem 0;
+    }
+
     h2 {
       font-size: clamp(1.2rem, 1.6vw, 1.6rem);
       font-weight: map-get($font-weights, light);
@@ -643,7 +668,7 @@ footer {
     }
 
     p {
-      font-size: $fsize;
+      font-size: clamp(0.8rem, 1vw, 1rem);
       line-height: 28px;
       padding-bottom: 20px;
       margin: 0;
@@ -855,4 +880,10 @@ footer {
 
 .Login {
   color: red;
+}
+
+.navbar-toggler{
+  &:focus{
+    box-shadow: none;
+  }
 }

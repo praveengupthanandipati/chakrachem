@@ -56,7 +56,7 @@ const HomeBanner = () => {
         <SwiperSlide key={item.id}>
           <img src={item.imageName} className="img-fluid w-100" alt="" />
           <article className="slider-article">
-            <h6>{item.smallTitle}</h6>
+            <h6 className="d-none d-md-block">{item.smallTitle}</h6>
             <h1 className="slidertitle">
               {item.titlePrimary} <span>{item.titleSecondary}</span>
             </h1>
