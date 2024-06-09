@@ -12,9 +12,10 @@ import ProductsList from "./pages/ProductsList";
 import ProductDetail from "./pages/ProductDetail";
 import Login from "./Admin/pages/login";
 import AdminLayout from "./Admin/AdminLayout";
-import AdminHeader from "./Admin/AdminHeader";
-import AdminFooter from "./Admin/AdminFooter";
-import AdminDashboard from "./Admin/pages/AdminDashboard"; 
+import AdminHeader from "./Admin/includes/AdminHeader";
+import AdminFooter from "./Admin/includes/AdminFooter";
+import AdminDashboard from "./Admin/pages/AdminDashboard";
+import AdminCategories from "./Admin/pages/AdminCategories";
 
 function App() {
   return (
@@ -112,17 +113,22 @@ function App() {
             }
           />
 
-          <Route
-            path="Admin"
-            element={<Login />}
-          />
+          <Route path="Admin" element={<Login />} />
           <Route
             path="Admin/Dashboard"
             element={
               <AdminLayout>
                 <AdminHeader />
                 <AdminDashboard />
-                <AdminFooter />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="Admin/Categories"
+            element={
+              <AdminLayout>
+                <AdminHeader />
+                <AdminCategories />
               </AdminLayout>
             }
           />

@@ -1,0 +1,124 @@
+@import "/src/assets/styles/mixins";
+@import "/src/assets/styles/variables";
+
+.login-admin {
+  height: 100vh;
+  background: #f5f5f9;
+
+  .login-left {
+    img {
+      height: 100vh;
+    }
+  }
+  .login-section {
+    position: relative;
+
+    &:before {
+      content: "";
+      background-image: url(../img/login-bg-before.svg);
+      width: 148px;
+      height: 148px;
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      z-index: 0;
+    }
+    &:after {
+      content: "";
+      background-image: url(../img/login-bg-before.svg);
+      width: 148px;
+      height: 148px;
+      position: absolute;
+      bottom: -40px;
+      left: -40px;
+      z-index: 0;
+    }
+    .login-inner {
+      position: relative;
+      z-index: 99;
+      min-height: 400px;
+    }
+  }
+}
+
+.form-control { 
+  min-height: 50px;
+  border-radius: 0;
+  &:focus {
+    box-shadow: none;
+  }
+  &:placeholder-shown {
+    font-size: $fsize - 2;
+  }
+}
+
+.form-label{
+  font-size:$fsize - 1;
+}
+
+.admin-layout {
+  display: flex;
+  background: #f5f5f9;
+  height: 100vh;
+
+  .aside-admin {
+    background: map-get($colors, white);
+    width: 17rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    box-shadow: 0 0.125rem 0.375rem 0 rgba(161, 172, 184, 0.12);
+    padding: 2rem;
+    color: #697a8d;
+
+    .nav-aside {
+      padding-top: 2rem;
+
+      .nav-title {
+        display: block;
+        padding-top: 1.5rem;
+        padding-bottom: 0.5rem;
+        font-size: $fsize - 2;
+      }
+
+      li {
+        .nav-link {
+          color: map-get($colors, black);
+          display: block;
+          padding: 12px;
+          border-bottom: 1px solid map-get($colors, lightgray);
+          font-size: $fsize - 1;
+          @include transition(all 0.5s ease);
+
+          &:hover {
+            background: map-get($colors, primary);
+            color: map-get($colors, white);
+          }
+        }
+      }
+    }
+  }
+  .admin-main {
+    padding-left: 17rem;
+    width: 100%;
+
+    .admin-container {
+      padding: 2rem 0 0 5rem;
+
+      .pagetitle {
+        border-bottom: 1px solid map-get($colors, lightblue2);
+        display: block;
+        padding-bottom: 2rem;
+        width: 100%;
+        margin-bottom: 2rem;
+      }
+      .admin-main-inner {
+        padding-top: 1rem;
+      }
+    }
+  }
+}

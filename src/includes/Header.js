@@ -177,6 +177,12 @@ const Header = () => {
                   onClick={closeOffcanvas}
                 >
                   <li className="nav-item">
+                    <select className="form-select" arila-label="Default select example">
+                      <option selected><span className="inr">₹</span>INR</option>
+                      <option value="USD"><span>$</span>USD</option>
+                    </select>
+                  </li>
+                  <li className="nav-item">
                     <NavLink
                       className="nav-link"
                       to=""
