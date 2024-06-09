@@ -7,6 +7,7 @@ import HomeProducts from "../components/HomeProducts";
 import HomeAboutImg from "../assets/img/abouthome.jpg";
 import MetricImage from "../assets/img/metricimg.jpg";
 import { NavLink } from "react-router-dom";
+import HomeCategories from "../components/HomeCategories";
 
 const Home = () => {
   scrollToTop(); //page load move top
@@ -84,44 +85,7 @@ const Home = () => {
         {/* Caregories */}
         <div className="HomeCategories">
           <div className="container">
-            <div className="row">
-              <div className="col-lg-3 col-sm-6">
-                <div className="shadow rounded mb-3 mb-lg-0">
-                  <HomeCatItem
-                    CatTitle="Flavones & Flavanones"
-                    CatDesc="Chakra Chem manufactures high-quality Flavones & Flavanones chemicals for diverse industrial applications, ensuring reliability and innovation."
-                    CatLink=""
-                  />
-                </div>
-              </div>
-              <div className="col-lg-3 col-sm-6">
-                <div className="shadow rounded mb-3 mb-lg-0">
-                  <HomeCatItem
-                    CatTitle="Fine Chemicals"
-                    CatDesc="Chakra Chem produces high-quality fine chemicals, ensuring precision, reliability, and innovation for diverse industrial applications."
-                    CatLink=""
-                  />
-                </div>
-              </div>
-              <div className="col-lg-3 col-sm-6">
-                <div className="shadow rounded mb-3 mb-lg-0">
-                  <HomeCatItem
-                    CatTitle="Coumarin - Chalcones"
-                    CatDesc="Chakra Chem specializes in producing high-quality Coumarins and Chalcones for various industrial applications, ensuring reliability."
-                    CatLink=""
-                  />
-                </div>
-              </div>
-              <div className="col-lg-3 col-sm-6">
-                <div className="shadow rounded mb-3 mb-lg-0">
-                  <HomeCatItem
-                    CatTitle="API Intermediate"
-                    CatDesc="Chakra Chem manufactures high-quality API Intermediates, ensuring reliability and innovation for pharmaceutical industry needs. "
-                    CatLink=""
-                  />
-                </div>
-              </div>
-            </div>
+            <HomeCategories />
           </div>
         </div>
 

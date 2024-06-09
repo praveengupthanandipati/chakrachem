@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import scrollToTop from "../includes/ScrollToTop";
+import CategoryImg from "../assets/img/bg-category.jpg";
 
 const Products = () => {
   scrollToTop(); //page load move top
@@ -26,8 +27,9 @@ const Products = () => {
               </ul>
             </div>
           </div>
-        </div>
+        </div>       
       </section>
+      <img src={CategoryImg} alt="" className="img-fluid" />
       <section className="subPageBody">
         <div className="container">
           <div className="category-list-items">

@@ -209,7 +209,7 @@ const ProductDetail = () => {
                   <div className="text-end">
                     <NavLink
                       to=""
-                      className="green-btn"
+                      className="blue-btn"
                       data-bs-toggle="offcanvas"
                       data-bs-target="#requestBulkOrder"
                       aria-controls="offcanvasRight"
