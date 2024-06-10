@@ -39,7 +39,7 @@ const Categories = () => {
           <section className="admin-main-inner">
             <div className="row">
               <div className="col-md-8">
-                <div className="card bg-white rounded shadow p-4">
+                <div className="card bg-white rounded shadow p-4 card-container">
                   <div className="table-responsive">
                     <table className="table">
                       <thead className="table-dark">
@@ -79,7 +79,7 @@ const Categories = () => {
                 </div>
               </div>
               <div className="col-md-4">
-                <div className="card bg-white rounded shadow p-4">
+                <div className="card bg-white rounded shadow p-4 card-container">
                   <h5 className="h6 pb-4">Add New Category</h5>
 
                   <form className="form">

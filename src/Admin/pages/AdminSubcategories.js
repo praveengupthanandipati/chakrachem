@@ -44,7 +44,7 @@ const AdminSubcategories = () => {
           <section className="admin-main-inner">
             <div className="row">
               <div className="col-md-8">
-                <div className="card bg-white rounded shadow p-4">
+                <div className="card bg-white rounded shadow p-4 card-container">
                   <div class="mb-3">
                     <label for="category" className="form-label">
                       Filter by Category
@@ -102,7 +102,7 @@ const AdminSubcategories = () => {
                 </div>
               </div>
               <div className="col-md-4">
-                <div className="card bg-white rounded shadow p-4">
+                <div className="card bg-white rounded shadow p-4 card-container">
                   <h5 className="h6 pb-4">Add New Sub Category</h5>
 
                   <form className="form">
