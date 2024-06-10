@@ -1,33 +1,24 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const Categories = () => {
-  let PageTitle = "Product Categories";
-  const AdminCat = [
+const Country = () => {
+  let PageTitle = "Countries";
+  const AdminCurrency = [
     {
-      SNo: 1,
-      CatName: "Life Sciences",
-      CatStatus: "Active",
+      ID: 1,
+      Name: "India",
+      Code: "IN",
+      Currency: "₹",
+      Symbol: "₹",
+      Status: "Active",
     },
     {
-      SNo: 2,
-      CatName: "API Intermediates",
-      CatStatus: "Active",
-    },
-    {
-      SNo: 3,
-      CatName: "Chemical Derivatives",
-      CatStatus: "Active",
-    },
-    {
-      SNo: 4,
-      CatName: "Natural Products",
-      CatStatus: "Active",
-    },
-    {
-      SNo: 5,
-      CatName: "Natural",
-      CatStatus: "Active",
+      ID: 2,
+      Name: "USA",
+      Code: "US",
+      Currency: "$",
+      Symbol: "$",
+      Status: "Active",
     },
   ];
   return (
@@ -35,7 +26,6 @@ const Categories = () => {
       <div className="admin-container">
         <div className="container-fluid">
           <h1 className="h4 font-semibold pagetitle">{PageTitle}</h1>
-
           <section className="admin-main-inner">
             <div className="row">
               <div className="col-md-8">
@@ -44,18 +34,24 @@ const Categories = () => {
                     <table className="table">
                       <thead className="table-dark">
                         <tr>
-                          <th scope="col">S.No:</th>
-                          <th scope="col">Category Name</th>
+                          <th scope="col">ID</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Code</th>
+                          <th scope="col">Currency</th>
+                          <th scope="col">Symbol</th>
                           <th scope="col">Status</th>
                           <th scope="col">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {AdminCat.map((item) => (
-                          <tr key={item.id}>
-                            <td scope="row">{item.SNo}</td>
-                            <td>{item.CatName}</td>
-                            <td>{item.CatStatus}</td>
+                        {AdminCurrency.map((item) => (
+                          <tr key={item.ID}>
+                            <td scope="row">{item.ID}</td>
+                            <td>{item.Name}</td>
+                            <td>{item.Code}</td>
+                            <td>{item.Currency}</td>
+                            <td>{item.Symbol}</td>
+                            <td>{item.Status}</td>
                             <td>
                               <NavLink
                                 to=""
@@ -80,33 +76,56 @@ const Categories = () => {
               </div>
               <div className="col-md-4">
                 <div className="card bg-white rounded shadow p-4">
-                  <h5 className="h6 pb-4">Add New Category</h5>
+                  <h5 className="h6 pb-4">Add New Currency</h5>
 
-                  <form className="form">
+                  <form className="form">                  
                     <div class="mb-3">
-                      <label for="categpryname" className="form-label">
-                        Category Name
+                      <label for="currname" className="form-label">
+                        Currency Name
                       </label>
                       <input
                         type="text"
                         className="form-control"
-                        id="categpryname"
-                        placeholder="Category Name"
+                        id="currname"
+                        placeholder="Currency Name"
                         aria-label=".form-control-sm example"
                       />
                     </div>
                     <div class="mb-3">
-                      <label for="description-category" className="form-label">
-                        Category Description
+                      <label for="curcode" className="form-label">
+                        Currency Code
                       </label>
-                      <textarea
+                      <input
                         type="text"
                         className="form-control"
-                        id="description-category"
-                        placeholder="Description"
+                        id="curcode"
+                        placeholder="Currency Code"
                         aria-label=".form-control-sm example"
-                        rows="3"
-                      ></textarea>
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="currency" className="form-label">
+                        Currency
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="currency"
+                        placeholder="Currency"
+                        aria-label=".form-control-sm example"
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="currencysym" className="form-label">
+                        Currency Symbol
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="currencysym"
+                        placeholder="Currency Symbol"
+                        aria-label=".form-control-sm example"
+                      />
                     </div>
                     <div class="mb-3">
                       <label for="status" className="form-label">
@@ -133,4 +152,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default Country;
