@@ -23,7 +23,7 @@ function AdminHeader() {
           </NavLink>
         </li>
         <li>
-          <NavLink to="" className="nav-link">
+          <NavLink to="/Admin/SubCategories" className="nav-link">
             Sub Categories
           </NavLink>
         </li>
@@ -44,7 +44,7 @@ function AdminHeader() {
             Change Password
           </NavLink>
           <li>
-            <NavLink to="" className="nav-link">
+            <NavLink to="/Admin/Countries" className="nav-link">
               Country
             </NavLink>
           </li>

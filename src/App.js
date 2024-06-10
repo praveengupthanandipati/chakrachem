@@ -16,6 +16,8 @@ import AdminHeader from "./Admin/includes/AdminHeader";
 import AdminFooter from "./Admin/includes/AdminFooter";
 import AdminDashboard from "./Admin/pages/AdminDashboard";
 import AdminCategories from "./Admin/pages/AdminCategories";
+import AdminSubcategories from "./Admin/pages/AdminSubcategories";
+import Country from "./Admin/pages/Country";
 
 function App() {
   return (
@@ -129,6 +131,24 @@ function App() {
               <AdminLayout>
                 <AdminHeader />
                 <AdminCategories />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="Admin/SubCategories"
+            element={
+              <AdminLayout>
+                <AdminHeader />
+                <AdminSubcategories />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="Admin/Countries"
+            element={
+              <AdminLayout>
+                <AdminHeader />
+                <Country />
               </AdminLayout>
             }
           />

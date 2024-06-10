@@ -691,17 +691,11 @@ footer {
     &:focus {
       box-shadow: none;
     }
-  }
-  .form-select {
-    font-size: $fsize - 1;
-
-    &:focus {
-      box-shadow: none;
-    }
-  }
+  }  
 }
 
 .form-select {
+  font-size:$fsize - 1;
   &:focus {
     box-shadow: none;
   }

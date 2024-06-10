@@ -1,32 +1,37 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const Categories = () => {
-  let PageTitle = "Product Categories";
-  const AdminCat = [
+const AdminSubcategories = () => {
+  let PageTitle = "Product Sub Categories";
+  const AdminSubCat = [
     {
       SNo: 1,
       CatName: "Life Sciences",
+      SubCatName: "Heterocyclic Building Blocks",
       CatStatus: "Active",
     },
     {
       SNo: 2,
       CatName: "API Intermediates",
+      SubCatName: "Specialty Synthesis",
       CatStatus: "Active",
     },
     {
       SNo: 3,
       CatName: "Chemical Derivatives",
+      SubCatName: "Organometallic Reagents",
       CatStatus: "Active",
     },
     {
       SNo: 4,
       CatName: "Natural Products",
+      SubCatName: "Asymmetric Synthesis",
       CatStatus: "Active",
     },
     {
       SNo: 5,
       CatName: "Natural",
+      SubCatName: "Catalysis Chemistry",
       CatStatus: "Active",
     },
   ];
@@ -40,20 +45,38 @@ const Categories = () => {
             <div className="row">
               <div className="col-md-8">
                 <div className="card bg-white rounded shadow p-4">
+                  <div class="mb-3">
+                    <label for="category" className="form-label">
+                      Filter by Category
+                    </label>
+                    <select
+                      className="form-select form-control"
+                      aria-label="Default select example"
+                      id="category"
+                    >
+                      <option selected>Life Sciences</option>
+                      <option value="1">API Intermediates</option>
+                      <option value="2">Chemical Derivatives</option>
+                      <option value="2">Natural Products</option>
+                      <option value="2">Natural</option>
+                    </select>
+                  </div>
                   <div className="table-responsive">
                     <table className="table">
                       <thead className="table-dark">
                         <tr>
                           <th scope="col">S.No:</th>
                           <th scope="col">Category Name</th>
+                          <th scope="col">Sub Category Name</th>
                           <th scope="col">Status</th>
                           <th scope="col">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {AdminCat.map((item) => (
+                        {AdminSubCat.map((item) => (
                           <tr key={item.id}>
                             <td scope="row">{item.SNo}</td>
+                            <td>{item.SubCatName}</td>
                             <td>{item.CatName}</td>
                             <td>{item.CatStatus}</td>
                             <td>
@@ -80,33 +103,36 @@ const Categories = () => {
               </div>
               <div className="col-md-4">
                 <div className="card bg-white rounded shadow p-4">
-                  <h5 className="h6 pb-4">Add New Category</h5>
+                  <h5 className="h6 pb-4">Add New Sub Category</h5>
 
                   <form className="form">
                     <div class="mb-3">
+                      <label for="category" className="form-label">
+                        Select Category
+                      </label>
+                      <select
+                        className="form-select form-control"
+                        aria-label="Default select example"
+                        id="category"
+                      >
+                        <option selected>Life Sciences</option>
+                        <option value="1">API Intermediates</option>
+                        <option value="2">Chemical Derivatives</option>
+                        <option value="2">Natural Products</option>
+                        <option value="2">Natural</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
                       <label for="categpryname" className="form-label">
-                        Category Name
+                        Sub Category Name
                       </label>
                       <input
                         type="text"
                         className="form-control"
                         id="categpryname"
-                        placeholder="Category Name"
+                        placeholder="Sub Category Name"
                         aria-label=".form-control-sm example"
                       />
-                    </div>
-                    <div class="mb-3">
-                      <label for="description-category" className="form-label">
-                        Category Description
-                      </label>
-                      <textarea
-                        type="text"
-                        className="form-control"
-                        id="description-category"
-                        placeholder="Description"
-                        aria-label=".form-control-sm example"
-                        rows="3"
-                      ></textarea>
                     </div>
                     <div class="mb-3">
                       <label for="status" className="form-label">
@@ -133,4 +159,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default AdminSubcategories;
