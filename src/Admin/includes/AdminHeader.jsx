@@ -28,8 +28,8 @@ function AdminHeader() {
           </NavLink>
         </li>
         <li>
-          <NavLink to="" className="nav-link">
-            Products List
+          <NavLink to="/Admin/Products" className="nav-link">
+            Products
           </NavLink>
         </li>
         <li>

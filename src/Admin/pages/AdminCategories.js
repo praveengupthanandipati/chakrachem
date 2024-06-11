@@ -17,7 +17,7 @@ const Categories = () => {
     {
       SNo: 3,
       CatName: "Chemical Derivatives",
-      CatStatus: "Active",
+      CatStatus: "Inactive",
     },
     {
       SNo: 4,
@@ -55,7 +55,18 @@ const Categories = () => {
                           <tr key={item.id}>
                             <td scope="row">{item.SNo}</td>
                             <td>{item.CatName}</td>
-                            <td>{item.CatStatus}</td>
+                            <td>
+                              <span
+                                style={{
+                                  color:
+                                    item.CatStatus === "Active"
+                                      ? "green"
+                                      : "red",
+                                }}
+                              >
+                                {item.CatStatus}
+                              </span>
+                            </td>
                             <td>
                               <NavLink
                                 to=""

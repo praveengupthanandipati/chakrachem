@@ -18,6 +18,7 @@ import AdminDashboard from "./Admin/pages/AdminDashboard";
 import AdminCategories from "./Admin/pages/AdminCategories";
 import AdminSubcategories from "./Admin/pages/AdminSubcategories";
 import Country from "./Admin/pages/Country";
+import AdminProducts from "./Admin/pages/AdminProducts";
 
 function App() {
   return (
@@ -149,6 +150,15 @@ function App() {
               <AdminLayout>
                 <AdminHeader />
                 <Country />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="Admin/Products"
+            element={
+              <AdminLayout>
+                <AdminHeader />
+                <AdminProducts />
               </AdminLayout>
             }
           />
