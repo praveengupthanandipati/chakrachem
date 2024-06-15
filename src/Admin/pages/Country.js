@@ -18,7 +18,7 @@ const Country = () => {
       Code: "US",
       Currency: "$",
       Symbol: "$",
-      Status: "Active",
+      Status: "Inactive",
     },
   ];
   return (
@@ -29,7 +29,7 @@ const Country = () => {
           <section className="admin-main-inner">
             <div className="row">
               <div className="col-md-8">
-                <div className="card bg-white rounded shadow p-4">
+                <div className="card bg-white rounded shadow p-4 card-container">
                   <div className="table-responsive">
                     <table className="table">
                       <thead className="table-dark">
@@ -51,7 +51,16 @@ const Country = () => {
                             <td>{item.Code}</td>
                             <td>{item.Currency}</td>
                             <td>{item.Symbol}</td>
-                            <td>{item.Status}</td>
+                            <td>
+                              <span
+                                style={{
+                                  color:
+                                    item.Status === "Active" ? "green" : "red",
+                                }}
+                              >
+                                {item.Status}
+                              </span>
+                            </td>
                             <td>
                               <NavLink
                                 to=""
@@ -75,10 +84,10 @@ const Country = () => {
                 </div>
               </div>
               <div className="col-md-4">
-                <div className="card bg-white rounded shadow p-4">
+                <div className="card bg-white rounded shadow p-4 card-container">
                   <h5 className="h6 pb-4">Add New Currency</h5>
 
-                  <form className="form">                  
+                  <form className="form">
                     <div class="mb-3">
                       <label for="currname" className="form-label">
                         Currency Name

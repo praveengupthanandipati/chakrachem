@@ -20,7 +20,7 @@ const AdminSubcategories = () => {
       SNo: 3,
       CatName: "Chemical Derivatives",
       SubCatName: "Organometallic Reagents",
-      CatStatus: "Active",
+      CatStatus: "Inactive",
     },
     {
       SNo: 4,
@@ -32,7 +32,7 @@ const AdminSubcategories = () => {
       SNo: 5,
       CatName: "Natural",
       SubCatName: "Catalysis Chemistry",
-      CatStatus: "Active",
+      CatStatus: "Inactive",
     },
   ];
   return (
@@ -44,7 +44,7 @@ const AdminSubcategories = () => {
           <section className="admin-main-inner">
             <div className="row">
               <div className="col-md-8">
-                <div className="card bg-white rounded shadow p-4">
+                <div className="card bg-white rounded shadow p-4 card-container">
                   <div class="mb-3">
                     <label for="category" className="form-label">
                       Filter by Category
@@ -78,7 +78,18 @@ const AdminSubcategories = () => {
                             <td scope="row">{item.SNo}</td>
                             <td>{item.SubCatName}</td>
                             <td>{item.CatName}</td>
-                            <td>{item.CatStatus}</td>
+                            <td>
+                              <span
+                                style={{
+                                  color:
+                                    item.CatStatus === "Active"
+                                      ? "green"
+                                      : "red",
+                                }}
+                              >
+                                {item.CatStatus}
+                              </span>
+                            </td>
                             <td>
                               <NavLink
                                 to=""
@@ -102,7 +113,7 @@ const AdminSubcategories = () => {
                 </div>
               </div>
               <div className="col-md-4">
-                <div className="card bg-white rounded shadow p-4">
+                <div className="card bg-white rounded shadow p-4 card-container">
                   <h5 className="h6 pb-4">Add New Sub Category</h5>
 
                   <form className="form">

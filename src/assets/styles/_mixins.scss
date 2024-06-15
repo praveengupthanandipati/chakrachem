@@ -36,8 +36,8 @@
   -webkit-justify-content: center;
   justify-content: center;
   -webkit-box-align: center;
-  -ms-flex-align: center; 
-  flex-direction: column;  
+  -ms-flex-align: center;
+  flex-direction: column;
 }
 
 //box shadow
@@ -66,3 +66,46 @@
     @content;
   }
 }
+
+/*
+
+@mixin respond-to($breakpoint) {
+  $value: map-get($breakpoints, $breakpoint);
+  @if $value != null {
+    @media (min-width: $value) {
+      @content;
+    }
+  }
+}
+
+@include respond-to(sm){
+  color:green
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin box-shadow($x, $y, $blue, $color) {
+  -webkit-box-shadow: $x, $y, $blue, $color;
+  -moz-box-shadow: $x, $y, $blue, $color;
+  -ms-box-shadow: $x, $y, $blue, $color;
+  box-shadow: $x, $y, $blue, $color;
+}
+
+@mixin transition($property, $duration, $timing: ease-in-out) {
+  transition: $property, $duration, $timing;
+  -webkit-transition: $property, $duration, $timing;
+  -moz-transition: $property, $duration, $timing;
+  -ms-transition: $property, $duration, $timing;
+}
+
+@mixin flexbox($justify: center, $align: center) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+}
+*/

@@ -41,7 +41,7 @@
   }
 }
 
-.form-control { 
+.form-control {
   min-height: 50px;
   border-radius: 0;
   &:focus {
@@ -52,8 +52,8 @@
   }
 }
 
-.form-label{
-  font-size:$fsize - 1;
+.form-label {
+  font-size: $fsize - 1;
 }
 
 .admin-layout {
@@ -120,5 +120,17 @@
         padding-top: 1rem;
       }
     }
+  }
+}
+
+.card-container {
+  min-height: 80vh;
+  overflow-y: auto;
+  border: none;
+}
+
+.table{
+  th{
+    font-weight: map-get($font-weights, regular);
   }
 }
