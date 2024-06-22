@@ -19,6 +19,7 @@ import AdminCategories from "./Admin/pages/AdminCategories";
 import AdminSubcategories from "./Admin/pages/AdminSubcategories";
 import Country from "./Admin/pages/Country";
 import AdminProducts from "./Admin/pages/AdminProducts";
+import AdminNewProduct from "./Admin/pages/AdminNewProduct";
 
 function App() {
   return (
@@ -159,6 +160,15 @@ function App() {
               <AdminLayout>
                 <AdminHeader />
                 <AdminProducts />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="Admin/New-Product"
+            element={
+              <AdminLayout>
+                <AdminHeader />
+                <AdminNewProduct />
               </AdminLayout>
             }
           />

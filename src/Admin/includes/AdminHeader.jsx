@@ -5,7 +5,9 @@ function AdminHeader() {
   return (
     <aside className="aside-admin">
       <h1 className="h4 ">
-        <NavLink to="/" className="font-bold font-black">Chakra Chem</NavLink>
+        <NavLink to="/" className="font-bold font-black">
+          Chakra Chem
+        </NavLink>
       </h1>
 
       <ul className="nav-aside">
@@ -33,7 +35,7 @@ function AdminHeader() {
           </NavLink>
         </li>
         <li>
-          <NavLink to="" className="nav-link">
+          <NavLink to="/Admin/New-Product" className="nav-link">
             Create Product
           </NavLink>
         </li>
