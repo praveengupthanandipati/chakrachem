@@ -687,15 +687,15 @@ footer {
   }
   .form-control {
     font-size: $fsize - 1;
-    border-radius: 0;
+    border-radius: 3px;
     &:focus {
       box-shadow: none;
     }
-  }  
+  }
 }
 
 .form-select {
-  font-size:$fsize - 1;
+  font-size: $fsize - 1;
   &:focus {
     box-shadow: none;
   }

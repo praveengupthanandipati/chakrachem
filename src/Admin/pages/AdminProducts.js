@@ -181,7 +181,7 @@ const AdminProducts = () => {
                       <div className="col-md-2">
                         <button
                           type="button"
-                          className="btn btn-primary btn-lg mt-1"
+                          className="btn btn-primary mt-1"
                         >
                           Search
                         </button>
@@ -192,9 +192,13 @@ const AdminProducts = () => {
                     <button type="button" class="btn btn-primary me-3">
                       Upload
                     </button>
-                    <a to="" type="button" class="btn btn-success">
-                      + Add Product
-                    </a>
+                    <NavLink
+                      to="/Admin/New-Product"
+                      type="button"
+                      class="btn btn-success"
+                    >
+                      + Add New Product
+                    </NavLink>
                   </div>
                 </div>
               </div>
