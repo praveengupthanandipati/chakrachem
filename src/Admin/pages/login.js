@@ -1,8 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import LoginFigure from "../assets/img/admin-left-img.jpg";
-import { NavLink } from "react-router-dom";
 
-const login = () => {
+const Login = () => {
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const loginRequest = { userName, password };
+
+    try {
+      const response = await fetch("http://localhost:8080/chakram/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginRequest),
+      });
+
+      const result = await response.text();
+
+      if (result === "Login successful") {
+        navigate("/Admin/Dashboard");
+      } else {
+        setLoginError("Invalid credentials");
+      }
+    } catch (error) {
+      console.error("Error logging in:", error);
+      setLoginError("An error occurred. Please try again.");
+    }
+  };
+
   return (
     <section className="login-admin">
       <div className="container-fluid px-0">
@@ -19,26 +51,33 @@ const login = () => {
                       Welcome to Chakra!
                     </h1>
 
-                    <form className="form-adminlogin mt-5">
+                    <form className="form-adminlogin mt-5" onSubmit={handleSubmit}>
                       <div className="form-floating mb-3">
                         <input
                           type="text"
                           className="form-control"
                           id="userName"
                           placeholder="Enter Username"
+                          value={userName}
+                          onChange={(e) => setUserName(e.target.value)}
                         />
-                        <label for="userName">Enter Username</label>
+                        <label htmlFor="userName">Enter Username</label>
                       </div>
                       <div className="form-floating mb-3">
                         <input
                           type="password"
                           className="form-control"
                           id="password"
-                          placeholder="Enter Username"
+                          placeholder="Enter Password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
-                        <label for="password">Enter Password</label>
+                        <label htmlFor="password">Enter Password</label>
                       </div>
-                      <NavLink className="text-center blue-btn border-0 d-block w-100" to="/Admin/Dashboard">Sign in</NavLink>
+                      <button type="submit" className="text-center blue-btn border-0 d-block w-100">
+                        Sign in
+                      </button>
+                      {loginError && <div className="text-danger mt-3 text-center">{loginError}</div>}
                     </form>
                   </div>
                 </div>
@@ -51,4 +90,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;

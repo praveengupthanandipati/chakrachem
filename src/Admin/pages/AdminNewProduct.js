@@ -1,754 +1,832 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState } from "react";
 import TextEditor from "../components/TextEditor";
 
 const AdminNewProduct = () => {
   let PageTitle = "Create New Product";
+
+  const [productId, setProductId] = useState("");
+  const [productIdError, setProductIdError] = useState("");
+  const [productName, setProductName] = useState("");
+  const [productNameError, setProductNameError] = useState("");
+  const [productPurity, setProductPurity] = useState("");
+  const [productPurityError, setProductPurityError] = useState("");
+  const validateProductId = () => {
+    if (!productId) {
+      setProductIdError("Product ID is required");
+      return false;
+    } else if (!/^\d+$/.test(productId)) {
+      // Example: Only digits allowed
+      setProductIdError("Product ID must be a number");
+      return false;
+    } else {
+      setProductIdError("");
+      return true;
+    }
+  };
+
+  // Validation function product Name
+  const validateProductName = () => {
+    if (!productName) {
+      setProductNameError("Product Name is required");
+      return false;
+    } else if (!/^\d+$/.test(productName)) {
+      // Example: Only digits allowed
+      setProductNameError("Product Name must be a Text");
+      return false;
+    } else {
+      setProductNameError("");
+      return true;
+    }
+  };
+
+  // Validation function product Purity
+  const validateProductPurity = () => {
+    if (!productPurity) {
+      setProductPurityError("Product Purity is required");
+      return false;
+    } else if (!/^\d+$/.test(productPurity)) {
+      // Example: Only digits allowed
+      setProductPurityError("Product Purity must be a Number");
+      return false;
+    } else {
+      setProductPurityError("");
+      return true;
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if ((validateProductId(), validateProductName(), validateProductPurity())) {
+      // Proceed with form submission
+      console.log("Form submitted with Product ID:", productId);
+    }
+  };
+
   return (
     <section className="admin-main">
       <div className="admin-container">
         <div className="container-fluid">
           <h1 className="h4 font-semibold pagetitle">{PageTitle}</h1>
           <section className="admin-main-inner">
-            <div className="card bg-white rounded shadow p-4">
-              <h5 className="pb-3 mb-4 border-bottom">Basic Details</h5>
-              <div className="row">
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="productImage" className="form-label">
-                      Product Image
-                    </label>
-                    <input
-                      className="form-control"
-                      type="file"
-                      id="productImage"
-                      placeholder="Product Image"
-                    />
+            <form onSubmit={handleSubmit}>
+              <div className="card bg-white rounded shadow p-4">
+                <h5 className="pb-3 mb-4 border-bottom">Basic Details</h5>
+                <div className="row">
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="productImage" className="form-label">
+                        Product Image
+                      </label>
+                      <input
+                        className="form-control"
+                        type="file"
+                        id="productImage"
+                        placeholder="Product Image"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="productId" className="form-label">
-                      Product ID
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="productId"
-                      placeholder="Enter Product ID"
-                    />
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="productId" className="form-label">
+                        Product ID
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="productId"
+                        placeholder="Enter Product ID"
+                        value={productId}
+                        onChange={(e) => setProductId(e.target.value)}
+                        onBlur={validateProductId}
+                      />
+                      {productIdError && (
+                        <div className="text-danger">{productIdError}</div>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="productName" className="form-label">
-                      Product Title / Name
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="productId"
-                      placeholder="Enter Product Name"
-                    />
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="productName" className="form-label">
+                        Product Title / Name
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="productName"
+                        placeholder="Enter Product Name"
+                        value={productName}
+                        onChange={(e) => setProductName(e.target.value)}
+                      />
+                      {productNameError && (
+                        <div className="text-danger">{productNameError}</div>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="purity" className="form-label">
-                      Purity
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="productId"
-                      placeholder="97%"
-                    />
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="purity" className="form-label">
+                        Purity
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="productId"
+                        placeholder="97%"
+                        value={productPurity}
+                        onChange={(e) => setProductPurity(e.target.value)}
+                      />
+                      {productPurityError && (
+                        <div className="text-danger">{productPurityError}</div>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-12">
-                  <div className="mb-3">
-                    <label for="purity" className="form-label">
-                      Synonym(s) / Description
-                    </label>
-                    <div>
-                      <TextEditor></TextEditor>
+                  <div className="col-md-12">
+                    <div className="mb-3">
+                      <label for="purity" className="form-label">
+                        Synonym(s) / Description
+                      </label>
+                      <div>
+                        <TextEditor></TextEditor>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="casnumber" className="form-label">
+                        CAS Number
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="casnumber"
+                        placeholder="CAS Number"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="MolecularWeight" className="form-label">
+                        Molecular Weight
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="MolecularWeight"
+                        placeholder="Molecular Weight"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="EmpericalFormula" className="form-label">
+                        Emperical Formula (Hill Notation)
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="EmpericalFormula"
+                        placeholder="Emperical Formula"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="ECNumber" className="form-label">
+                        EC Number
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="ECNumber"
+                        placeholder="EC Number"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="MDLNumber" className="form-label">
+                        MDL Number
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="MDLNumber"
+                        placeholder="MDL Number"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="Category" className="form-label">
+                        Category
+                      </label>
+                      <select
+                        className="form-select form-control"
+                        aria-label="Default select example"
+                        id="category"
+                      >
+                        <option selected>Life Sciences</option>
+                        <option value="1">API Intermediates</option>
+                        <option value="2">Chemical Derivatives</option>
+                        <option value="2">Natural Products</option>
+                        <option value="2">Natural</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="SubCategory" className="form-label">
+                        Sub Category
+                      </label>
+                      <select
+                        className="form-select form-control"
+                        aria-label="Default select example"
+                        id="SubCategory"
+                      >
+                        <option selected>Life Sciences</option>
+                        <option value="1">API Intermediates</option>
+                        <option value="2">Chemical Derivatives</option>
+                        <option value="2">Natural Products</option>
+                        <option value="2">Natural</option>
+                      </select>
                     </div>
                   </div>
                 </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="casnumber" className="form-label">
-                      CAS Number
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="casnumber"
-                      placeholder="CAS Number"
-                    />
+              </div>
+              <div className="card bg-white rounded shadow p-4 mt-3">
+                <div className="row justify-content-between border-bottom pb-3">
+                  <div className="col-md-6 align-self-center">
+                    <h5>Documents</h5>
+                  </div>
+                  <div className="col-md-6 text-end align-self-center">
+                    <button class="btn btn-primary" type="submit">
+                      <span class="icon-plus"></span>
+                    </button>
                   </div>
                 </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="MolecularWeight" className="form-label">
-                      Molecular Weight
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="MolecularWeight"
-                      placeholder="Molecular Weight"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="EmpericalFormula" className="form-label">
-                      Emperical Formula (Hill Notation)
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="EmpericalFormula"
-                      placeholder="Emperical Formula"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="ECNumber" className="form-label">
-                      EC Number
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="ECNumber"
-                      placeholder="EC Number"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="MDLNumber" className="form-label">
-                      MDL Number
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="MDLNumber"
-                      placeholder="MDL Number"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="Category" className="form-label">
-                      Category
-                    </label>
-                    <select
-                      className="form-select form-control"
-                      aria-label="Default select example"
-                      id="category"
-                    >
-                      <option selected>Life Sciences</option>
-                      <option value="1">API Intermediates</option>
-                      <option value="2">Chemical Derivatives</option>
-                      <option value="2">Natural Products</option>
-                      <option value="2">Natural</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="SubCategory" className="form-label">
-                      Sub Category
-                    </label>
-                    <select
-                      className="form-select form-control"
-                      aria-label="Default select example"
-                      id="SubCategory"
-                    >
-                      <option selected>Life Sciences</option>
-                      <option value="1">API Intermediates</option>
-                      <option value="2">Chemical Derivatives</option>
-                      <option value="2">Natural Products</option>
-                      <option value="2">Natural</option>
-                    </select>
-                  </div>
+                <div className="table mt-2">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th scope="col" width="40%">
+                          Name of Document
+                        </th>
+                        <th scope="col">Upload File</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter Document Name"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className="form-control"
+                            type="file"
+                            id="productImage"
+                            placeholder="Upload File"
+                          />
+                        </td>
+                        <td>
+                          <button class="btn btn-primary" type="submit">
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter Document Name"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className="form-control"
+                            type="file"
+                            id="productImage"
+                            placeholder="Upload File"
+                          />
+                        </td>
+                        <td>
+                          <button class="btn btn-primary" type="submit">
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
-            </div>
 
-            <div className="card bg-white rounded shadow p-4 mt-3">
-              <div className="row justify-content-between border-bottom pb-3">
-                <div className="col-md-6 align-self-center">
-                  <h5>Documents</h5>
+              <div className="card bg-white rounded shadow p-4 mt-3">
+                <div className="row justify-content-between border-bottom pb-3">
+                  <div className="col-md-6 align-self-center">
+                    <h5>SKU's</h5>
+                  </div>
+                  <div className="col-md-6 text-end align-self-center">
+                    <button class="btn btn-primary" type="submit">
+                      <span class="icon-plus"></span>
+                    </button>
+                  </div>
                 </div>
-                <div className="col-md-6 text-end align-self-center">
-                  <button class="btn btn-primary" type="submit">
-                    <span class="icon-plus"></span>
-                  </button>
-                </div>
-              </div>
-              <div className="table mt-2">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th scope="col" width="40%">
-                        Name of Document
-                      </th>
-                      <th scope="col">Upload File</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Enter Document Name"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className="form-control"
-                          type="file"
-                          id="productImage"
-                          placeholder="Upload File"
-                        />
-                      </td>
-                      <td>
-                        <button class="btn btn-primary" type="submit">
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Enter Document Name"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className="form-control"
-                          type="file"
-                          id="productImage"
-                          placeholder="Upload File"
-                        />
-                      </td>
-                      <td>
-                        <button class="btn btn-primary" type="submit">
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                <div className="table mt-2">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th scope="col" width="25%">
+                          SKU Name
+                        </th>
+                        <th scope="col">Pack Size</th>
+                        <th scope="col">Available Date</th>
+                        <th scope="col">Price INR</th>
+                        <th scope="col">Price Dollor</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="SKU Name"
+                          />
+                        </td>
 
-            <div className="card bg-white rounded shadow p-4 mt-3">
-              <div className="row justify-content-between border-bottom pb-3">
-                <div className="col-md-6 align-self-center">
-                  <h5>SKU's</h5>
-                </div>
-                <div className="col-md-6 text-end align-self-center">
-                  <button class="btn btn-primary" type="submit">
-                    <span class="icon-plus"></span>
-                  </button>
-                </div>
-              </div>
-              <div className="table mt-2">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th scope="col" width="25%">
-                        SKU Name
-                      </th>
-                      <th scope="col">Pack Size</th>
-                      <th scope="col">Available Date</th>
-                      <th scope="col">Price INR</th>
-                      <th scope="col">Price Dollor</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="SKU Name"
-                        />
-                      </td>
-
-                      <td>
-                        <div className="d-flex">
-                          <div className="mb-3">
-                            <select
-                              className="form-select form-control"
-                              aria-label="Default select example"
-                              id="weight"
-                            >
-                              <option selected>Grams</option>
-                              <option value="1">ML</option>
-                              <option value="2">KG's</option>
-                              <option value="2">Litre</option>
-                            </select>
+                        <td>
+                          <div className="d-flex">
+                            <div className="mb-3">
+                              <select
+                                className="form-select form-control"
+                                aria-label="Default select example"
+                                id="weight"
+                              >
+                                <option selected>Grams</option>
+                                <option value="1">ML</option>
+                                <option value="2">KG's</option>
+                                <option value="2">Litre</option>
+                              </select>
+                            </div>
+                            <div>
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter Value"
+                              />
+                            </div>
                           </div>
-                          <div>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Enter Value"
-                            />
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <input
-                          className="form-control"
-                          type="date"
-                          id="availableDate"
-                          placeholder="Select Date"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className="form-control"
-                          type="number"
-                          id="inrValue"
-                          placeholder="INR Value"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className="form-control"
-                          type="number"
-                          id="dollorValue"
-                          placeholder="Dollor Value"
-                        />
-                      </td>
-                      <td>
-                        <button class="btn btn-primary" type="submit">
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
+                        </td>
+                        <td>
+                          <input
+                            className="form-control"
+                            type="date"
+                            id="availableDate"
+                            placeholder="Select Date"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className="form-control"
+                            type="number"
+                            id="inrValue"
+                            placeholder="INR Value"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className="form-control"
+                            type="number"
+                            id="dollorValue"
+                            placeholder="Dollor Value"
+                          />
+                        </td>
+                        <td>
+                          <button class="btn btn-primary" type="submit">
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
 
-                    <tr>
-                      <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="SKU Name"
-                        />
-                      </td>
+                      <tr>
+                        <td>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="SKU Name"
+                          />
+                        </td>
 
-                      <td>
-                        <div className="d-flex">
-                          <div className="mb-3">
-                            <select
-                              className="form-select form-control"
-                              aria-label="Default select example"
-                              id="weight"
-                            >
-                              <option selected>Grams</option>
-                              <option value="1">ML</option>
-                              <option value="2">KG's</option>
-                              <option value="2">Litre</option>
-                            </select>
+                        <td>
+                          <div className="d-flex">
+                            <div className="mb-3">
+                              <select
+                                className="form-select form-control"
+                                aria-label="Default select example"
+                                id="weight"
+                              >
+                                <option selected>Grams</option>
+                                <option value="1">ML</option>
+                                <option value="2">KG's</option>
+                                <option value="2">Litre</option>
+                              </select>
+                            </div>
+                            <div>
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter Value"
+                              />
+                            </div>
                           </div>
-                          <div>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Enter Value"
-                            />
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <input
-                          className="form-control"
-                          type="date"
-                          id="availableDate"
-                          placeholder="Select Date"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className="form-control"
-                          type="number"
-                          id="inrValue"
-                          placeholder="INR Value"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className="form-control"
-                          type="number"
-                          id="dollorValue"
-                          placeholder="Dollor Value"
-                        />
-                      </td>
-                      <td>
-                        <button class="btn btn-primary" type="submit">
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                        </td>
+                        <td>
+                          <input
+                            className="form-control"
+                            type="date"
+                            id="availableDate"
+                            placeholder="Select Date"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className="form-control"
+                            type="number"
+                            id="inrValue"
+                            placeholder="INR Value"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className="form-control"
+                            type="number"
+                            id="dollorValue"
+                            placeholder="Dollor Value"
+                          />
+                        </td>
+                        <td>
+                          <button class="btn btn-primary" type="submit">
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
 
-            <div className="card bg-white rounded shadow p-4 mt-3">
-              <h5 className="pb-3 mb-4 border-bottom">General Information</h5>
-              <div className="row">
-                <div className="col-md-3">
+              <div className="card bg-white rounded shadow p-4 mt-3">
+                <h5 className="pb-3 mb-4 border-bottom">General Information</h5>
+                <div className="row">
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="PhysicalState" className="form-label">
+                        Physical State (20 deg.C)
+                      </label>
+                      <select
+                        className="form-select form-control"
+                        aria-label="Default select example"
+                        id="PhysicalState"
+                      >
+                        <option selected>Solid</option>
+                        <option value="1">Liquid</option>
+                        <option value="2">Powder</option>
+                        <option value="2">Others</option>
+                        <option value="2">Others2</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="PackagingandContainer" className="form-label">
+                        Packaging and Container
+                      </label>
+                      <input
+                        className="form-control"
+                        type="file"
+                        id="PackagingandContainer"
+                        placeholder="Packaging and Container"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="CASRN" className="form-label">
+                        CAS RN
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="CASRN"
+                        placeholder="92-61-5"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="ReaxysRegistryNumber" className="form-label">
+                        Reaxys Registry Number
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="ReaxysRegistryNumber"
+                        placeholder="Reaxys Registry Number"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="PubChem" className="form-label">
+                        PubChem Substance ID
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="PubChem"
+                        placeholder="PubChem Substance ID"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="SDBS" className="form-label">
+                        SDBS (AIST Spectral DB)
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="SDBS"
+                        placeholder="SDBS (AIST Spectral DB)"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="metrix" className="form-label">
+                        Merck Index (14)
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="metrix"
+                        placeholder="Merck Index (14)"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="card bg-white rounded shadow p-4 mt-3">
+                <h5 className="pb-3 mb-4 border-bottom">
+                  Specifications & Properties
+                </h5>
+                <div className="row">
+                  <div className="col-md-12 my-3">
+                    <h6>Specifications</h6>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="PackagingandContainer" className="form-label">
+                        Appearance
+                      </label>
+                      <input
+                        className="form-control"
+                        type="file"
+                        id="PackagingandContainer"
+                        placeholder="Appearance"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="Purity" className="form-label">
+                        Purity(HPLC)
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="Purity"
+                        placeholder="Purity(HPLC)"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="Neutralization" className="form-label">
+                        Purity(Neutralization titration)
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="Neutralization"
+                        placeholder="Purity(Neutralization titration)"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-12 my-3">
+                    <h6>Properties (reference)</h6>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="MeltingPoint" className="form-label">
+                        Melting Point
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="MeltingPoint"
+                        placeholder="Melting Point"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="Solubility" className="form-label">
+                        Solubility in water
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="Solubility"
+                        placeholder="Solubility in water"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="Solubility" className="form-label">
+                        Solubility (soluble in)
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="Solubility"
+                        placeholder="Solubility (soluble in)"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="card bg-white rounded shadow p-4 mt-3">
+                <h5 className="pb-3 mb-4 border-bottom">
+                  Safety & Regulations
+                </h5>
+                <div className="row">
+                  <div className="col-md-12 my-3">
+                    <h6>GHS</h6>
+                  </div>
+                  <div className="col-md-12">
+                    <div className="mb-3">
+                      <label for="SignalWord" className="form-label">
+                        Signal Word
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="SignalWord"
+                        placeholder="Signal Word"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-12">
+                    <div className="mb-3">
+                      <label for="HazardStatements" className="form-label">
+                        Hazard Statements
+                      </label>
+                      <div>
+                        <TextEditor></TextEditor>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-12">
+                    <div className="mb-3">
+                      <label for="HazardStatements" className="form-label">
+                        Precautionary Statements
+                      </label>
+                      <div>
+                        <TextEditor></TextEditor>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-12 my-3">
+                    <h6>Related Laws:</h6>
+                  </div>
+                  <div className="col-md-12">
+                    <div className="mb-3">
+                      <label for="rtecs" className="form-label">
+                        RTECS
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="rtecs"
+                        placeholder="RTECS#"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="card bg-white rounded shadow p-4 mt-3">
+                <div className="row justify-content-between border-bottom pb-3">
+                  <div className="col-md-6 align-self-center">
+                    <h5>Applications</h5>
+                  </div>
+                  <div className="col-md-6 text-end align-self-center">
+                    <button class="btn btn-primary" type="submit">
+                      <span class="icon-plus"></span>
+                    </button>
+                  </div>
+                </div>
+                <div className="table mt-2">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th scope="col" width="40%">
+                          Name of Application
+                        </th>
+                        <th scope="col">Upload File</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter Application Name"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className="form-control"
+                            type="file"
+                            id="productImage"
+                            placeholder="Upload File"
+                          />
+                        </td>
+                        <td>
+                          <button class="btn btn-primary" type="submit">
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter Application Name"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className="form-control"
+                            type="file"
+                            id="productImage"
+                            placeholder="Upload File"
+                          />
+                        </td>
+                        <td>
+                          <button class="btn btn-primary" type="submit">
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="col-md-12">
                   <div className="mb-3">
                     <label for="PhysicalState" className="form-label">
-                      Physical State (20 deg.C)
+                      Available
                     </label>
                     <select
                       className="form-select form-control"
                       aria-label="Default select example"
                       id="PhysicalState"
                     >
-                      <option selected>Solid</option>
-                      <option value="1">Liquid</option>
-                      <option value="2">Powder</option>
-                      <option value="2">Others</option>
-                      <option value="2">Others2</option>
+                      <option selected>In Stock</option>
+                      <option value="1">Out of Stock</option>
                     </select>
                   </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="PackagingandContainer" className="form-label">
-                      Packaging and Container
-                    </label>
-                    <input
-                      className="form-control"
-                      type="file"
-                      id="PackagingandContainer"
-                      placeholder="Packaging and Container"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="CASRN" className="form-label">
-                      CAS RN
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="CASRN"
-                      placeholder="92-61-5"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="ReaxysRegistryNumber" className="form-label">
-                      Reaxys Registry Number
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="ReaxysRegistryNumber"
-                      placeholder="Reaxys Registry Number"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="PubChem" className="form-label">
-                      PubChem Substance ID
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="PubChem"
-                      placeholder="PubChem Substance ID"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="SDBS" className="form-label">
-                      SDBS (AIST Spectral DB)
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="SDBS"
-                      placeholder="SDBS (AIST Spectral DB)"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="metrix" className="form-label">
-                      Merck Index (14)
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="metrix"
-                      placeholder="Merck Index (14)"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="card bg-white rounded shadow p-4 mt-3">
-              <h5 className="pb-3 mb-4 border-bottom">
-                Specifications & Properties
-              </h5>
-              <div className="row">
-                <div className="col-md-12 my-3">
-                  <h6>Specifications</h6>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="PackagingandContainer" className="form-label">
-                      Appearance
-                    </label>
-                    <input
-                      className="form-control"
-                      type="file"
-                      id="PackagingandContainer"
-                      placeholder="Appearance"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="Purity" className="form-label">
-                      Purity(HPLC)
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="Purity"
-                      placeholder="Purity(HPLC)"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="Neutralization" className="form-label">
-                      Purity(Neutralization titration)
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="Neutralization"
-                      placeholder="Purity(Neutralization titration)"
-                    />
-                  </div>
-                </div>
-
-                <div className="col-md-12 my-3">
-                  <h6>Properties (reference)</h6>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="MeltingPoint" className="form-label">
-                      Melting Point
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="MeltingPoint"
-                      placeholder="Melting Point"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="Solubility" className="form-label">
-                      Solubility in water
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="Solubility"
-                      placeholder="Solubility in water"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="mb-3">
-                    <label for="Solubility" className="form-label">
-                      Solubility (soluble in)
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="Solubility"
-                      placeholder="Solubility (soluble in)"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="card bg-white rounded shadow p-4 mt-3">
-              <h5 className="pb-3 mb-4 border-bottom">Safety & Regulations</h5>
-              <div className="row">
-                <div className="col-md-12 my-3">
-                  <h6>GHS</h6>
-                </div>
-                <div className="col-md-12">
-                  <div className="mb-3">
-                    <label for="SignalWord" className="form-label">
-                      Signal Word
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="SignalWord"
-                      placeholder="Signal Word"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-12">
-                  <div className="mb-3">
-                    <label for="HazardStatements" className="form-label">
-                      Hazard Statements
-                    </label>
-                    <div>
-                      <TextEditor></TextEditor>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-12">
-                  <div className="mb-3">
-                    <label for="HazardStatements" className="form-label">
-                      Precautionary Statements
-                    </label>
-                    <div>
-                      <TextEditor></TextEditor>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-12 my-3">
-                  <h6>Related Laws:</h6>
-                </div>
-                <div className="col-md-12">
-                  <div className="mb-3">
-                    <label for="rtecs" className="form-label">
-                      RTECS
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="rtecs"
-                      placeholder="RTECS#"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="card bg-white rounded shadow p-4 mt-3">
-              <div className="row justify-content-between border-bottom pb-3">
-                <div className="col-md-6 align-self-center">
-                  <h5>Applications</h5>
-                </div>
-                <div className="col-md-6 text-end align-self-center">
                   <button class="btn btn-primary" type="submit">
-                    <span class="icon-plus"></span>
+                    Save Product
                   </button>
                 </div>
               </div>
-              <div className="table mt-2">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th scope="col" width="40%">
-                        Name of Application
-                      </th>
-                      <th scope="col">Upload File</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Enter Application Name"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className="form-control"
-                          type="file"
-                          id="productImage"
-                          placeholder="Upload File"
-                        />
-                      </td>
-                      <td>
-                        <button class="btn btn-primary" type="submit">
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Enter Application Name"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className="form-control"
-                          type="file"
-                          id="productImage"
-                          placeholder="Upload File"
-                        />
-                      </td>
-                      <td>
-                        <button class="btn btn-primary" type="submit">
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div className="col-md-12">
-                <div className="mb-3">
-                  <label for="PhysicalState" className="form-label">
-                    Available
-                  </label>
-                  <select
-                    className="form-select form-control"
-                    aria-label="Default select example"
-                    id="PhysicalState"
-                  >
-                    <option selected>In Stock</option>
-                    <option value="1">Out of Stock</option>
-                  </select>
-                </div>
-                <button class="btn btn-primary" type="submit">
-                  Save Product
-                </button>
-              </div>
-            </div>
+            </form>
           </section>
         </div>
       </div>
