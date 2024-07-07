@@ -1,27 +1,22 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import JoditEditor from "jodit-react";
 
-const TextEditor = () => {
+const TextEditor = ({ value, onChange }) => {
   const editor = useRef(null);
-  const [content, setContent] = useState("Start Description");
   const config = {
     readonly: false,
     height: 300,
   };
-  const handleUpdate = (event) => {
-    // const editorContent = event.target.innerHTML;
-    // setContent(editorContent);
-  };
+
   return (
     <div>
       <JoditEditor
         ref={editor}
-        value={content}
+        value={value}
         config={config}
-        onBlur={handleUpdate}
+        onBlur={(newContent) => onChange(newContent)}
         onChange={(newContent) => {}}
       />
-      {/* <div dangerouslySetInnerHTML={{ __html: content }} /> */}
     </div>
   );
 };

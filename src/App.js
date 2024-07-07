@@ -21,6 +21,8 @@ import Country from "./Admin/pages/Country";
 import AdminProducts from "./Admin/pages/AdminProducts";
 import AdminNewProduct from "./Admin/pages/AdminNewProduct";
 
+import AddProduct from './Admin/pages/AddProduct'
+
 function App() {
   return (
     <div className="App">
@@ -169,6 +171,15 @@ function App() {
               <AdminLayout>
                 <AdminHeader />
                 <AdminNewProduct />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="Admin/AddProduct"
+            element={
+              <AdminLayout>
+                <AdminHeader />
+                <AddProduct />
               </AdminLayout>
             }
           />
