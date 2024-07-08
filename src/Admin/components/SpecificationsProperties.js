@@ -4,24 +4,34 @@ const SpecificationsProperties = ({ specifications, onSpecificationsChange }) =>
   const [formErrors, setFormErrors] = useState({});
 
   const handleInputChange = (e) => {
-    const { id, value, files } = e.target;
+    const { id, type } = e.target;
+    let newValue = e.target.value;
 
-    if (id === 'appearance' && files.length > 0) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        onSpecificationsChange({
-          ...specifications,
-          specificationImage: reader.result, // Base64 image string
-        });
-      };
-      reader.readAsDataURL(files[0]);
+    if (type === 'file') {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          onSpecificationsChange({
+            ...specifications,
+            image: reader.result, // Store base64 string of the image
+          });
+        };
+      }
     } else {
       onSpecificationsChange({
         ...specifications,
-        [id]: value,
+        [id]: newValue,
       });
     }
+
+    setFormErrors({
+      ...formErrors,
+      [`${id}Error`]: '',
+    });
   };
+
 
   const validateForm = (e) => {
     const { id, value } = e.target;

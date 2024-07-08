@@ -41,9 +41,9 @@ const SafetyRegulations = ({ safetyData, onSafetyDataChange }) => {
             <input
               className="form-control"
               type="text"
-              id="signalWord"
+              id="ghsSignalWord"
               placeholder="Signal Word"
-              value={safetyData.signalWord}
+              value={safetyData.ghsSignalWord}
               onChange={handleInputChange}
               onBlur={validateForm}
             />

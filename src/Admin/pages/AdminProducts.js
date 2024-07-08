@@ -147,7 +147,7 @@ const AdminProducts = () => {
                       products.map((item) => (
                         <tr key={item.id}>
                           <td scope="row">{item.id}</td>
-                          <td>{item.productName}</td>
+                          <td>{item.name}</td>
                           <td>{item.category}</td>
                           <td>{item.code}</td>
                           <td>{item.cas}</td>
