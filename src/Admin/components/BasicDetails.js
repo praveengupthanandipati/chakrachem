@@ -1,14 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import TextEditor from '../components/TextEditor'; // Assuming you have a TextEditor component
+import React, { useState, useEffect } from "react";
+import TextEditor from "../components/TextEditor"; // Assuming you have a TextEditor component
+import axios from "axios";
 
 const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
   const [formErrors, setFormErrors] = useState({});
+  const [categoryData, setCategoryData] = useState([]);
+  const [subCategoryData, setSubCategoryData] = useState([]);
 
   useEffect(() => {
-    // Clear form errors whenever basicDetails changes
     setFormErrors({});
-  }, [basicDetails]);
+    fetchCategories(); // Fetch categories on component mount
+  }, []);
 
+  // Function to fetch categories
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/chakram/api/getAllCategories");
+      if (!response.data) {
+        throw new Error("Failed to fetch categories");
+      }
+      setCategoryData(response.data);
+      console.log("Fetched category data:", response.data);
+      if (response.data.length > 0) {
+        handleCategoryChange(response.data[0].id); // Fetch subcategories for the first category by default
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  // Function to fetch subcategories by categoryId
+  const fetchSubCategoriesById = async (categoryId) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/chakram/api/getSubCategoriesById/${categoryId}`);
+      setSubCategoryData(response.data);
+      console.log("Fetched subcategory data:", response.data);
+    } catch (error) {
+      console.error("Error fetching subcategories:", error);
+    }
+  };
+
+  // Handle input changes
   const handleInputChange = (e) => {
     const { id, type } = e.target;
     let newValue = e.target.value;
@@ -31,13 +63,9 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
         [id]: newValue,
       });
     }
-
-    setFormErrors({
-      ...formErrors,
-      [`${id}Error`]: '',
-    });
   };
 
+  // Handle select changes for category and subcategory
   const handleSelectChange = (e) => {
     const { id, value } = e.target;
     onBasicDetailsChange({
@@ -45,19 +73,28 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
       [id]: value,
     });
 
-    // Clear error for the select when changed
     setFormErrors({
       ...formErrors,
-      [`${id}Error`]: '',
+      [`${id}Error`]: "",
     });
+
+    if (id === 'category') {
+      handleCategoryChange(value); // Fetch subcategories based on the selected category id
+    }
   };
 
+  // Handle category change
+  const handleCategoryChange = (categoryId) => {
+    fetchSubCategoriesById(categoryId); // Fetch subcategories based on the category id
+  };
+
+  // Validate form fields
   const validateForm = (e) => {
     const { id, value } = e.target;
     let errors = {};
 
     if (!value) {
-      errors[`${id}Error`] = `${id.replace(/([A-Z])/g, ' $1')} is required`;
+      errors[`${id}Error`] = `${id.replace(/([A-Z])/g, " $1")} is required`;
     }
 
     setFormErrors({
@@ -72,14 +109,25 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
       <div className="row">
         <div className="col-md-3">
           <div className="mb-3">
-            <label htmlFor="productImage" className="form-label">Product Image</label>
+            <label htmlFor="productImage" className="form-label">
+              Product Image
+            </label>
             <input
               className="form-control"
               type="file"
               id="productImage"
               onChange={handleInputChange}
             />
-            {formErrors.productImageError && <p className="error">{formErrors.productImageError}</p>}
+            {/* {basicDetails.productImage && (
+              <img
+                src={basicDetails.productImage}
+                alt="Product"
+                style={{ width: "100px", marginTop: "10px" }}
+              />
+            )} */}
+            {formErrors.productImageError && (
+              <p className="error">{formErrors.productImageError}</p>
+            )}
           </div>
         </div>
         <div className="col-md-3">
@@ -175,7 +223,9 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
               onBlur={validateForm}
             />
             {formErrors.molecularWeightError && (
-              <div className="text-danger">{formErrors.molecularWeightError}</div>
+              <div className="text-danger">
+                {formErrors.molecularWeightError}
+              </div>
             )}
           </div>
         </div>
@@ -194,7 +244,9 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
               onBlur={validateForm}
             />
             {formErrors.empiricalFormulaError && (
-              <div className="text-danger">{formErrors.empiricalFormulaError}</div>
+              <div className="text-danger">
+                {formErrors.empiricalFormulaError}
+              </div>
             )}
           </div>
         </div>
@@ -251,9 +303,11 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
               onBlur={validateForm}
             >
               <option value="">Select Category</option>
-              <option value="chemicals">Chemicals</option>
-              <option value="equipment">Equipment</option>
-              <option value="materials">Materials</option>
+              {categoryData.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
             </select>
             {formErrors.categoryError && (
               <div className="text-danger">{formErrors.categoryError}</div>
@@ -273,10 +327,11 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
               onBlur={validateForm}
             >
               <option value="">Select Subcategory</option>
-              {/* Add relevant subcategory options here */}
-              <option value="subcategory1">Subcategory 1</option>
-              <option value="subcategory2">Subcategory 2</option>
-              <option value="subcategory3">Subcategory 3</option>
+              {subCategoryData.map((subCategory) => (
+                <option key={subCategory.id} value={subCategory.id}>
+                  {subCategory.subCategoryName}
+                </option>
+              ))}
             </select>
             {formErrors.subCategoryError && (
               <div className="text-danger">{formErrors.subCategoryError}</div>
@@ -299,7 +354,9 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
           }
         />
         {formErrors.productDescriptionError && (
-          <div className="text-danger">{formErrors.productDescriptionError}</div>
+          <div className="text-danger">
+            {formErrors.productDescriptionError}
+          </div>
         )}
       </div>
     </div>

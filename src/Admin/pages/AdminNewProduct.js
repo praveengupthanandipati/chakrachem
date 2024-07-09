@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BasicDetails from "../components/BasicDetails";
 import Documents from "../components/Documents";
 import SKUs from "../components/SKUs";
@@ -9,6 +9,7 @@ import SafetyRegulations from "../components/SafetyRegulations";
 import Applications from "../components/Applications";
 
 const AdminNewProduct = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [basicDetails, setBasicDetails] = useState({
@@ -56,12 +57,15 @@ const AdminNewProduct = () => {
   const [applications, setApplications] = useState([]);
   const [availability, setAvailability] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // State to manage success message visibility
 
-  // Fetch product details by ID
+  // Fetch product details by ID if it exists
   useEffect(() => {
     const fetchProductDetails = async () => {
+      if (!id) return; // Do not fetch if there's no ID
+
       try {
-        const response = await fetch(`http://localhost:8080/api/products/16`);
+        const response = await fetch(`http://localhost:8080/api/products/${id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch product details");
         }
@@ -131,7 +135,7 @@ const AdminNewProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const formData = {
       productId: basicDetails.productId,
       productName: basicDetails.productName,
@@ -147,10 +151,12 @@ const AdminNewProduct = () => {
       image: basicDetails.productImage,
       availability: availability,
       documents: documents.map(doc => ({
+        id: doc.id,
         documentName: doc.documentName,
         fileContent: doc.fileContent, // Base64 content
       })),
       skus: skus.map(sku => ({
+        id: sku.id,
         skuName: sku.skuName,
         packSize: sku.packSize,
         availableDate: sku.availableDate,
@@ -158,6 +164,7 @@ const AdminNewProduct = () => {
         priceUsd: sku.priceUsd,
       })),
       generalInformation: {
+        id: generalInfo.id,
         physicalState: generalInfo.physicalState,
         packagingContainer: generalInfo.packagingContainer,
         casRn: generalInfo.casRn,
@@ -167,6 +174,7 @@ const AdminNewProduct = () => {
         reaxysNumber: generalInfo.reaxysNumber,
       },
       specification: {
+        id: specifications.id,
         image: specifications.image,
         purityHplc: specifications.purityHPLC,
         purityTitration: specifications.purityNeutralization,
@@ -175,39 +183,60 @@ const AdminNewProduct = () => {
         solubilityOther: specifications.solubilityIn,
       },
       safetyRegulation: {
+        id: safetyData.id,
         ghsSignalWord: safetyData.ghsSignalWord,
         hazardStatements: safetyData.hazardStatements,
         precautionaryStatements: safetyData.precautionaryStatements,
         rtecs: safetyData.rtecs,
       },
       applications: applications.map(app => ({
+        id: app.id,
         applicationName: app.applicationName,
         fileContent: app.fileContent,
       })),
     };
-
-    console.log(formData, 'formData');
+  
     try {
-      const response = await fetch("http://localhost:8080/api/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
+      let response;
+      if (id) {
+        // Update existing product
+        response = await fetch(`http://localhost:8080/api/products/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+      } else {
+        // Create new product
+        response = await fetch("http://localhost:8080/api/products", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+      }
+  
       if (!response.ok) {
         throw new Error("Failed to submit form");
       }
-
+  
       const responseData = await response.json();
       console.log("Form submitted successfully:", responseData);
-      setSuccessMessage("Product Created Successfully");
+      setSuccessMessage(id ? "Product Updated Successfully" : "Product Created Successfully");
+      setShowSuccessMessage(true);
+  
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        setSuccessMessage("");
+        navigate("/Admin/Products"); // Redirect to product listing page after 2 seconds
+      }, 2000); // Hide success message after 2 seconds and redirect
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
-
+  
   return (
     <section className="admin-main">
       <div className="admin-container">
@@ -263,8 +292,11 @@ const AdminNewProduct = () => {
               <button type="submit" className="btn btn-success mt-4">
                 Submit
               </button>
-              {successMessage && (
-                <div className="alert alert-success mt-4">
+              {showSuccessMessage && (
+                <div
+                  className="alert alert-success mt-4 text-center"
+                  style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+                >
                   {successMessage}
                 </div>
               )}

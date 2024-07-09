@@ -13,7 +13,6 @@ import ProductDetail from "./pages/ProductDetail";
 import Login from "./Admin/pages/login";
 import AdminLayout from "./Admin/AdminLayout";
 import AdminHeader from "./Admin/includes/AdminHeader";
-import AdminFooter from "./Admin/includes/AdminFooter";
 import AdminDashboard from "./Admin/pages/AdminDashboard";
 import AdminCategories from "./Admin/pages/AdminCategories";
 import AdminSubcategories from "./Admin/pages/AdminSubcategories";
@@ -21,7 +20,6 @@ import Country from "./Admin/pages/Country";
 import AdminProducts from "./Admin/pages/AdminProducts";
 import AdminNewProduct from "./Admin/pages/AdminNewProduct";
 
-import AddProduct from './Admin/pages/AddProduct'
 
 function App() {
   return (
@@ -165,7 +163,7 @@ function App() {
               </AdminLayout>
             }
           />
-          <Route
+         <Route
             path="Admin/New-Product"
             element={
               <AdminLayout>
@@ -175,11 +173,11 @@ function App() {
             }
           />
           <Route
-            path="Admin/AddProduct"
+            path="Admin/New-Product/:id"
             element={
               <AdminLayout>
                 <AdminHeader />
-                <AddProduct />
+                <AdminNewProduct />
               </AdminLayout>
             }
           />
