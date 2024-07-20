@@ -81,7 +81,7 @@ const SpecificationsProperties = ({ specifications, onSpecificationsChange }) =>
               type="text"
               id="purityHPLC"
               placeholder="Purity (HPLC)"
-              value={specifications.purityHPLC}
+              value={specifications.purityHplc}
               onChange={handleInputChange}
               onBlur={validateForm}
             />
@@ -100,7 +100,7 @@ const SpecificationsProperties = ({ specifications, onSpecificationsChange }) =>
               type="text"
               id="purityNeutralization"
               placeholder="Purity (Neutralization titration)"
-              value={specifications.purityNeutralization}
+              value={specifications.purityTitration}
               onChange={handleInputChange}
               onBlur={validateForm}
             />
@@ -144,7 +144,7 @@ const SpecificationsProperties = ({ specifications, onSpecificationsChange }) =>
               type="text"
               id="solubilityInWater"
               placeholder="Solubility in water"
-              value={specifications.solubilityInWater}
+              value={specifications.solubilityWater}
               onChange={handleInputChange}
               onBlur={validateForm}
             />
@@ -165,7 +165,7 @@ const SpecificationsProperties = ({ specifications, onSpecificationsChange }) =>
               type="text"
               id="solubilityIn"
               placeholder="Solubility (soluble in)"
-              value={specifications.solubilityIn}
+              value={specifications.solubilityOther}
               onChange={handleInputChange}
               onBlur={validateForm}
             />

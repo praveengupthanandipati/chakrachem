@@ -30,28 +30,28 @@ const AdminNewProduct = () => {
   const [documents, setDocuments] = useState([]);
   const [skus, setSkus] = useState([]);
   const [generalInfo, setGeneralInfo] = useState({
-    physicalState: '',
+    physicalState: "",
     packagingContainer: null,
-    casRn: '',
-    reaxysNumber: '',
-    pubchemId: '',
-    sdbsId: '',
-    merckIndex: '',
+    casRn: "",
+    reaxysNumber: "",
+    pubchemId: "",
+    sdbsId: "",
+    merckIndex: "",
   });
   const [specifications, setSpecifications] = useState({
     image: null,
-    purityHPLC: '',
-    purityNeutralization: '',
-    meltingPoint: '',
-    solubilityInWater: '',
-    solubilityIn: '',
+    purityHPLC: "",
+    purityNeutralization: "",
+    meltingPoint: "",
+    solubilityInWater: "",
+    solubilityIn: "",
   });
 
   const [safetyData, setSafetyData] = useState({
-    ghsSignalWord: '',
-    hazardStatements: '',
-    precautionaryStatements: '',
-    rtecs: '',
+    ghsSignalWord: "",
+    hazardStatements: "",
+    precautionaryStatements: "",
+    rtecs: "",
   });
 
   const [applications, setApplications] = useState([]);
@@ -135,7 +135,7 @@ const AdminNewProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const formData = {
       productId: basicDetails.productId,
       productName: basicDetails.productName,
@@ -150,12 +150,12 @@ const AdminNewProduct = () => {
       subCategory: basicDetails.subCategory,
       image: basicDetails.productImage,
       availability: availability,
-      documents: documents.map(doc => ({
+      documents: documents.map((doc) => ({
         id: doc.id,
         documentName: doc.documentName,
         fileContent: doc.fileContent, // Base64 content
       })),
-      skus: skus.map(sku => ({
+      skus: skus.map((sku) => ({
         id: sku.id,
         skuName: sku.skuName,
         packSize: sku.packSize,
@@ -189,13 +189,13 @@ const AdminNewProduct = () => {
         precautionaryStatements: safetyData.precautionaryStatements,
         rtecs: safetyData.rtecs,
       },
-      applications: applications.map(app => ({
+      applications: applications.map((app) => ({
         id: app.id,
         applicationName: app.applicationName,
         fileContent: app.fileContent,
       })),
     };
-  
+
     try {
       let response;
       if (id) {
@@ -217,16 +217,16 @@ const AdminNewProduct = () => {
           body: JSON.stringify(formData),
         });
       }
-  
+
       if (!response.ok) {
         throw new Error("Failed to submit form");
       }
-  
+
       const responseData = await response.json();
       console.log("Form submitted successfully:", responseData);
       setSuccessMessage(id ? "Product Updated Successfully" : "Product Created Successfully");
       setShowSuccessMessage(true);
-  
+
       setTimeout(() => {
         setShowSuccessMessage(false);
         setSuccessMessage("");
@@ -236,7 +236,7 @@ const AdminNewProduct = () => {
       console.error("Error submitting form:", error);
     }
   };
-  
+
   return (
     <section className="admin-main">
       <div className="admin-container">
@@ -288,14 +288,25 @@ const AdminNewProduct = () => {
                 </div>
               </div>
 
-              {/* Submit Button */}
               <button type="submit" className="btn btn-success mt-4">
                 Submit
               </button>
               {showSuccessMessage && (
                 <div
                   className="alert alert-success mt-4 text-center"
-                  style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    position: "fixed",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    zIndex: 1000,
+                    width: "fit-content",
+                    padding: "1em",
+                    color: "#fff",
+                    backgroundColor: "bg-dummy", // Your desired background color
+                    borderRadius: "10px",
+                  }}
                 >
                   {successMessage}
                 </div>

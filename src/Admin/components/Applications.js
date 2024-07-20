@@ -3,7 +3,7 @@ import React from 'react';
 const Applications = ({ applications, onApplicationsChange }) => {
   const handleDocumentNameChange = (e, index) => {
     const newDocuments = [...applications];
-    newDocuments[index].documentName = e.target.value;
+    newDocuments[index].applicationName = e.target.value;
     onApplicationsChange(newDocuments);
   };
 
@@ -29,7 +29,7 @@ const Applications = ({ applications, onApplicationsChange }) => {
   };
 
   const handleAddDocument = () => {
-    onApplicationsChange([...applications, { documentName: '', fileContent: '' }]);
+    onApplicationsChange([...applications, { applicationName: '', fileContent: '' }]);
   };
 
   return (
@@ -48,7 +48,7 @@ const Applications = ({ applications, onApplicationsChange }) => {
                 className="form-control"
                 type="text"
                 placeholder="Application Name"
-                value={document.documentName}
+                value={document.applicationName}
                 onChange={(e) => handleDocumentNameChange(e, index)}
               />
             </div>
