@@ -23,8 +23,10 @@ const Categories = () => {
         newErrors.name = 'Name must contain only alphabetic characters and spaces';
       }
 
-      if (categoryDescription.length > 1000) {
-        newErrors.description = 'Description exceeds maximum length';
+      if (categoryDescription.length === 0) {
+        newErrors.description = 'Description is required';
+      } else if (categoryDescription.length >250) {
+        newErrors.description = 'Description cannot be more than 250 characters';
       }
 
       const data = {
@@ -33,6 +35,7 @@ const Categories = () => {
         status: status,
         id: catId
       }
+
       if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
         return;
@@ -48,16 +51,14 @@ const Categories = () => {
 
       if (response.ok) {
         if (catId != null) {
-          setSaveMessage("Category Saved Successfully");
-        }
-        else {
           setSaveMessage("Category Updated Successfully");
+        } else {
+          setSaveMessage("Category Saved Successfully");
         }
         setTimeout(() => {
           window.location.reload();
         }, 3000);
-      }
-      else {
+      } else {
         setSaveFail("Failed to Save");
       }
 
@@ -118,7 +119,7 @@ const Categories = () => {
       const data = await response.json();
       console.log(`Edit category with ID ${id}:`, data);
       setCategoryName(data.name);
-      setCategoryDescription(data.description)
+      setCategoryDescription(data.description);
       setStatus(data.status);
       setCatId(data.id);
     } catch (error) {

@@ -14,6 +14,7 @@ const AdminNewProduct = () => {
 
   const [basicDetails, setBasicDetails] = useState({
     productImage: null,
+    imageName: "",
     productId: "",
     productName: "",
     productPurity: "",
@@ -57,7 +58,16 @@ const AdminNewProduct = () => {
   const [applications, setApplications] = useState([]);
   const [availability, setAvailability] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // State to manage success message visibility
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [validationMessages, setValidationMessages] = useState({
+    basicDetails: true,
+    documents: true,
+    skus: true,
+    generalInfo: true,
+    specifications: true,
+    safetyData: true,
+    applications: true,
+  });
 
   // Fetch product details by ID if it exists
   useEffect(() => {
@@ -65,7 +75,9 @@ const AdminNewProduct = () => {
       if (!id) return; // Do not fetch if there's no ID
 
       try {
-        const response = await fetch(`http://localhost:8080/api/products/${id}`);
+        const response = await fetch(
+          `http://localhost:8080/api/products/${id}`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch product details");
         }
@@ -74,6 +86,7 @@ const AdminNewProduct = () => {
         // Update state with fetched product details
         setBasicDetails({
           productImage: product.image,
+          imageName: product.imageName,
           productId: product.productId,
           productName: product.productName,
           productPurity: product.purity,
@@ -85,6 +98,7 @@ const AdminNewProduct = () => {
           category: product.category,
           subCategory: product.subCategory,
           productDescription: product.startDescription,
+          availability:product.availability
         });
         setDocuments(product.documents);
         setSkus(product.skus);
@@ -136,6 +150,18 @@ const AdminNewProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Check for validation
+    const allValid = Object.values(validationMessages).every(Boolean);
+    if (!allValid) {
+      setSuccessMessage("Please fill in all required fields.");
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        setSuccessMessage("");
+      }, 2000);
+      return;
+    }
+
     const formData = {
       productId: basicDetails.productId,
       productName: basicDetails.productName,
@@ -153,6 +179,8 @@ const AdminNewProduct = () => {
       documents: documents.map((doc) => ({
         id: doc.id,
         documentName: doc.documentName,
+        fileType: doc.fileType,
+        fileName: doc.fileName,
         fileContent: doc.fileContent, // Base64 content
       })),
       skus: skus.map((sku) => ({
@@ -160,6 +188,7 @@ const AdminNewProduct = () => {
         skuName: sku.skuName,
         packSize: sku.packSize,
         availableDate: sku.availableDate,
+        packSizeValue:sku.packSizeValue,
         priceInr: sku.priceInr,
         priceUsd: sku.priceUsd,
       })),
@@ -224,7 +253,9 @@ const AdminNewProduct = () => {
 
       const responseData = await response.json();
       console.log("Form submitted successfully:", responseData);
-      setSuccessMessage(id ? "Product Updated Successfully" : "Product Created Successfully");
+      setSuccessMessage(
+        id ? "Product Updated Successfully" : "Product Created Successfully"
+      );
       setShowSuccessMessage(true);
 
       setTimeout(() => {
@@ -235,6 +266,13 @@ const AdminNewProduct = () => {
     } catch (error) {
       console.error("Error submitting form:", error);
     }
+  };
+
+  const handleValidationChange = (section, isValid) => {
+    setValidationMessages((prevMessages) => ({
+      ...prevMessages,
+      [section]: isValid,
+    }));
   };
 
   return (
@@ -248,25 +286,64 @@ const AdminNewProduct = () => {
               <BasicDetails
                 basicDetails={basicDetails}
                 onBasicDetailsChange={handleBasicDetailsChange}
+                onValidationChange={(isValid) =>
+                  handleValidationChange("basicDetails", isValid)
+                }
               />
 
               {/* Documents Section */}
-              <Documents documents={documents} onDocumentsChange={handleDocumentsChange} />
+              <Documents
+                documents={documents}
+                onDocumentsChange={handleDocumentsChange}
+                onValidationChange={(isValid) =>
+                  handleValidationChange("documents", isValid)
+                }
+              />
 
               {/* SKUs Section */}
-              <SKUs skus={skus} onSkusChange={handleSkusChange} />
+              <SKUs
+                skus={skus}
+                onSkusChange={handleSkusChange}
+                onValidationChange={(isValid) =>
+                  handleValidationChange("skus", isValid)
+                }
+              />
 
               {/* General Information Section */}
-              <GeneralInformation generalInfo={generalInfo} onGeneralInfoChange={handleGeneralInfoChange} />
+              <GeneralInformation
+                generalInfo={generalInfo}
+                onGeneralInfoChange={handleGeneralInfoChange}
+                onValidationChange={(isValid) =>
+                  handleValidationChange("generalInfo", isValid)
+                }
+              />
 
               {/* Specifications & Properties Section */}
-              <SpecificationsProperties specifications={specifications} onSpecificationsChange={handleSpecificationsChange} />
+              <SpecificationsProperties
+                specifications={specifications}
+                onSpecificationsChange={handleSpecificationsChange}
+                onValidationChange={(isValid) =>
+                  handleValidationChange("specifications", isValid)
+                }
+              />
 
               {/* Safety & Regulations Section */}
-              <SafetyRegulations safetyData={safetyData} onSafetyDataChange={handleSafetyDataChange} />
+              <SafetyRegulations
+                safetyData={safetyData}
+                onSafetyDataChange={handleSafetyDataChange}
+                onValidationChange={(isValid) =>
+                  handleValidationChange("safetyData", isValid)
+                }
+              />
 
               {/* Applications Section */}
-              <Applications applications={applications} onApplicationsChange={handleApplicationsChange} />
+              <Applications
+                applications={applications}
+                onApplicationsChange={handleApplicationsChange}
+                onValidationChange={(isValid) =>
+                  handleValidationChange("applications", isValid)
+                }
+              />
 
               <div className="card bg-white rounded shadow p-4 mt-4">
                 <div className="col-md-12">
@@ -278,7 +355,7 @@ const AdminNewProduct = () => {
                       className="form-select form-control"
                       aria-label="Default select example"
                       id="availability"
-                      value={availability}
+                      value={basicDetails.availability}
                       onChange={handleAvailabilityChange}
                     >
                       <option value="In Stock">In Stock</option>

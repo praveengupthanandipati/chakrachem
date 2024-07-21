@@ -20,7 +20,6 @@ import Country from "./Admin/pages/Country";
 import AdminProducts from "./Admin/pages/AdminProducts";
 import AdminNewProduct from "./Admin/pages/AdminNewProduct";
 
-
 function App() {
   return (
     <div className="App">
@@ -87,7 +86,7 @@ function App() {
             }
           />
           <Route
-            path="Products"
+            path="Products/:id"
             element={
               <>
                 <Header />
@@ -97,7 +96,7 @@ function App() {
             }
           />
           <Route
-            path="ProductsList"
+            path="ProductsList/:id"
             element={
               <>
                 <Header />
@@ -107,7 +106,7 @@ function App() {
             }
           />
           <Route
-            path="ProductDetail"
+            path="/ProductDetail/:id" // Define route with parameter
             element={
               <>
                 <Header />
@@ -163,7 +162,7 @@ function App() {
               </AdminLayout>
             }
           />
-         <Route
+          <Route
             path="Admin/New-Product"
             element={
               <AdminLayout>

@@ -1,10 +1,12 @@
-import { React, useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink, Link } from "react-router-dom";
 import Logo from "../assets/img/logo.svg";
 
 const Header = () => {
-  //mobile on click nav, hide off canvas
   const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false);
+  const [categoryData, setCategoryData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const toggleOffcanvas = () => {
     setIsOffcanvasOpen(!isOffcanvasOpen);
@@ -14,7 +16,70 @@ const Header = () => {
     setIsOffcanvasOpen(false);
   };
 
-  //on scroll add class to header
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/chakram/api/getAllCategories"
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch categories");
+      }
+      const data = await response.json();
+      const filteredData = data.filter((category) => category.status); // Only include categories with status true
+      setCategoryData(filteredData);
+      console.log("Fetched category data:", filteredData);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  const fetchProducts = async (query) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/products/searchProducts?query=${query}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch products");
+      }
+      const data = await response.json();
+      console.log(data, "data");
+      setSearchResults(data);
+      console.log("Fetched product data:", data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  const handleSearchResultClick = (id) => {
+    // Close offcanvas
+    closeOffcanvas();
+    // Optionally, you can also close any background modals here
+    const modal = document.querySelector(".offcanvas.show");
+    if (modal) {
+      modal.classList.remove("show");
+      document.body.classList.remove("modal-open");
+      document.querySelector(".modal-backdrop")?.remove();
+    }
+    // Redirect to the product detail page
+    window.location.href = `/ProductDetail/${id}`;
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    if (value.length > 2) {
+      fetchProducts(value);
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const handleDropdownClick = () => {
+    if (categoryData.length === 0) {
+      fetchCategories();
+    }
+  };
+
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
@@ -23,14 +88,11 @@ const Header = () => {
       setIsScrolled(shouldAddClass);
     };
 
-    // Attach the event listener when the component mounts
     window.addEventListener("scroll", handleScroll);
-
-    // Detach the event listener when the component unmounts
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []); //
+  }, []);
 
   return (
     <div>
@@ -54,7 +116,7 @@ const Header = () => {
               className={`offcanvas offcanvas-end ${
                 isOffcanvasOpen ? "show" : ""
               }`}
-              tabindex="-1"
+              tabIndex="-1"
               id="offcanvasNavbar"
               aria-labelledby="offcanvasNavbarLabel"
             >
@@ -90,15 +152,15 @@ const Header = () => {
                       About
                     </NavLink>
                   </li>
-
                   <li className="nav-item dropdown">
                     <NavLink
                       className="nav-link dropdown-toggle"
-                      to=" "
+                      to="#"
                       id="navbarDropdown"
                       role="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
+                      onClick={handleDropdownClick}
                     >
                       Products
                     </NavLink>
@@ -106,42 +168,17 @@ const Header = () => {
                       className="dropdown-menu"
                       aria-labelledby="navbarDropdown"
                     >
-                      <li>
-                        <NavLink
-                          className="dropdown-item"
-                          to="/Products"
-                          onClick={closeOffcanvas}
-                        >
-                          Life Sciences
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink
-                          className="dropdown-item"
-                          to=" "
-                          onClick={closeOffcanvas}
-                        >
-                          API Intermediate
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink
-                          className="dropdown-item"
-                          to=" "
-                          onClick={closeOffcanvas}
-                        >
-                          Chemical Derivatives
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink
-                          className="dropdown-item"
-                          to=" "
-                          onClick={closeOffcanvas}
-                        >
-                          Natural Products
-                        </NavLink>
-                      </li>
+                      {categoryData.map((category) => (
+                        <li key={category.id}>
+                          <NavLink
+                            className="dropdown-item"
+                            to={`/Products/${category.id}`}
+                            onClick={closeOffcanvas}
+                          >
+                            {category.name}
+                          </NavLink>
+                        </li>
+                      ))}
                     </ul>
                   </li>
                   <li className="nav-item">
@@ -177,9 +214,16 @@ const Header = () => {
                   onClick={closeOffcanvas}
                 >
                   <li className="nav-item">
-                    <select className="form-select" arila-label="Default select example">
-                      <option selected><span className="inr">₹</span>INR</option>
-                      <option value="USD"><span>$</span>USD</option>
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                    >
+                      <option selected>
+                        <span className="inr">₹</span>INR
+                      </option>
+                      <option value="USD">
+                        <span>$</span>USD
+                      </option>
                     </select>
                   </li>
                   <li className="nav-item">
@@ -213,7 +257,7 @@ const Header = () => {
 
       <div
         className="offcanvas offcanvas-top offcanvas-search"
-        tabindex="-1"
+        tabIndex="-1"
         id="searchCanvas"
         aria-labelledby="offcanvasExampleLabel"
       >
@@ -237,17 +281,41 @@ const Header = () => {
                   <input
                     type="text"
                     placeholder="Search the Product name or CAS Number"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
                   />
+                </div>
+                <div className="search-results">
+                  {searchQuery.length > 2 && searchResults.length > 0 && (
+                    <ul className="p-4">
+                      {searchResults.map((item) => (
+                        <li key={item.id}>
+                          <a
+                            href={`/ProductDetail/${item.id}`}
+                            className="dropdown-item"
+                            onClick={() => handleSearchResultClick(item.id)}
+                          >
+                            {item.name || item.cas}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
                 <div className="categories pt-4">
                   <h6 className="text-uppercase font-black font-semibold pb-1">
                     Search by Categories
                   </h6>
-                  <div>
-                    <a href="">Life Sciences</a>
-                    <a href="">API Intermediate</a>
-                    <a href="">Chemical Derivateves</a>
-                    <a href="">Natural Products</a>
+                  <div className="">
+                    {categoryData.length > 0 ? (
+                      categoryData.map((category) => (
+                        <a key={category.id} href={`/Products/${category.id}`}>
+                          {category.name}
+                        </a>
+                      ))
+                    ) : (
+                      <p>No categories available</p>
+                    )}
                   </div>
                 </div>
               </div>

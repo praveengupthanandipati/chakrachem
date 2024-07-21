@@ -6,6 +6,7 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
   const [formErrors, setFormErrors] = useState({});
   const [categoryData, setCategoryData] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState([]);
+  const [imageName, setImageName] = useState(""); // State for imageName
 
   useEffect(() => {
     setFormErrors({});
@@ -55,6 +56,7 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
             ...basicDetails,
             productImage: reader.result, // Store base64 string of the image
           });
+          setImageName(file.name || ""); // Update imageName state
         };
       }
     } else {
@@ -67,6 +69,7 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
 
   // Handle select changes for category and subcategory
   const handleSelectChange = (e) => {
+    console.log(e.target,"value");
     const { id, value } = e.target;
     onBasicDetailsChange({
       ...basicDetails,
@@ -118,13 +121,14 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
               id="productImage"
               onChange={handleInputChange}
             />
-            {/* {basicDetails.productImage && (
+             {imageName && <p className="mt-2">Selected File: {imageName}</p>}
+            {basicDetails.productImage && (
               <img
                 src={basicDetails.productImage}
                 alt="Product"
                 style={{ width: "100px", marginTop: "10px" }}
               />
-            )} */}
+            )}
             {formErrors.productImageError && (
               <p className="error">{formErrors.productImageError}</p>
             )}
@@ -328,7 +332,7 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
             >
               <option value="">Select Subcategory</option>
               {subCategoryData.map((subCategory) => (
-                <option key={subCategory.id} value={subCategory.id}>
+                <option key={subCategory.subCatId} value={subCategory.subCatId}>
                   {subCategory.subCategoryName}
                 </option>
               ))}

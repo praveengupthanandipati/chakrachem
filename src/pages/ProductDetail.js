@@ -1,13 +1,111 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, useParams } from "react-router-dom";
 import scrollToTop from "../includes/ScrollToTop";
 import product01 from "../assets/img/products/1702205754.png";
 import Picto from "../assets/img/GHS07.png";
 import Counter from "../includes/Counter";
 import HomeProducts from "../components/HomeProducts";
+import axios from "axios";
 
 const ProductDetail = () => {
   scrollToTop(); //page load move top
+  const { id } = useParams(); // Get the product ID from URL params
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [formData, setFormData] = useState({
+    company: "",
+    contact: "",
+    email: "",
+    phone: "",
+    quantity: "",
+    message: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData({
+      ...formData,
+      [id.toLowerCase()]: value,
+    });
+    setErrors({
+      ...errors,
+      [id.toLowerCase()]: "",
+    });
+  };
+
+  const validate = () => {
+    let tempErrors = {};
+    if (!formData.company) tempErrors.company = "Company Name is required";
+    if (!formData.contact) tempErrors.contact = "Contact Name is required";
+    if (!formData.email) tempErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      tempErrors.email = "Email is invalid";
+    if (!formData.phone) tempErrors.phone = "Phone is required";
+    if (!formData.quantity) tempErrors.quantity = "Quantity is required";
+
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      // Form is valid, proceed with submission
+      console.log("Form data:", formData);
+      alert("Bulk request sent successfully!");
+    }
+  };
+
+  const downloadDocument = (fileContent, documentName, fileType) => {
+    // Ensure the file type is PDF
+    const mimeType = fileType || "application/pdf";
+
+    // Decode base64 and create a Blob
+    const binaryString = window.atob(fileContent);
+    const binaryLen = binaryString.length;
+    const bytes = new Uint8Array(binaryLen);
+    for (let i = 0; i < binaryLen; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: mimeType });
+
+    // Create a temporary link and trigger the download
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download =
+      (documentName || "document") +
+      (mimeType === "application/pdf" ? ".pdf" : "");
+    document.body.appendChild(link); // Required for Firefox
+    link.click();
+    document.body.removeChild(link); // Clean up
+    URL.revokeObjectURL(link.href); // Clean up
+  };
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/products/${id}`
+        );
+        setProduct(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching product data", error);
+        setError(error);
+        setLoading(false);
+      }
+    };
+
+    fetchProductData();
+  }, [id]); // Add id as a dependency
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading product details.</p>;
+
   let pageName = "7-hydroxycoumarin";
   const RelatedCategoryItem = [
     { CategoryItem: "Heterocyclic Building Blocks" },
@@ -62,26 +160,43 @@ const ProductDetail = () => {
               <div className="row">
                 <div className="col-md-3">
                   <figure className="productDetailFigure">
-                    <img src={product01} alt={pageName} className="img-fluid" />
+                    <img
+                      src={product.image}
+                      alt={pageName}
+                      className="img-fluid"
+                    />
                   </figure>
                   <div className="documentsProduct">
                     <p>
                       <small>Documents Download</small>
                     </p>
-                    <p className="pb-2">
-                      <NavLink to="" className="font-semibold font-secondary">
-                        <span className="icon-download2"></span> COA
-                      </NavLink>
-                    </p>
+                    {product.documents.map((doc, index) => (
+                      <p key={index} className="pb-2">
+                        <NavLink
+                          to=""
+                          className="font-semibold font-secondary"
+                          onClick={() =>
+                            downloadDocument(
+                              doc.fileContent,
+                              doc.documentName,
+                              doc.fileType
+                            )
+                          }
+                        >
+                          <span className="icon-download2"></span>{" "}
+                          {doc.documentName || "COA"}
+                        </NavLink>
+                      </p>
+                    ))}
                   </div>
                 </div>
                 <div className="col-md-9">
                   <div className="product-description">
                     <div>
                       <p className="font-semibold d-flex pb-1">
-                        <span>93-35-6</span>
+                        <span>{product.casNumber}</span>
                         <span className="icon-rightarrow2 d-inline px-3 align-self-center"></span>
-                        <span> 7-hydroxycoumarin</span>
+                        <span>{product.subCategory}</span>
                       </p>
                       <p className="Synonyms pb-2">
                         <span className="font-semibold">Synonym(s):</span>
@@ -108,40 +223,48 @@ const ProductDetail = () => {
                         </NavLink>
                       </p>
                       <p className="font-bold font-secondary pb-1">
-                        Purity: <span>NLT 98%</span>
+                        Purity: <span>{product?.purity}</span>
                       </p>
                     </div>
                     <div className="row py-3">
                       <div className="col-md-4">
                         <p className="productDetailSpecp">
                           <span>CAS Number:</span>
-                          <span className="valueProduct">93-35-6</span>
+                          <span className="valueProduct">
+                            {product?.casNumber}
+                          </span>
                         </p>
                       </div>
                       <div className="col-md-4">
                         <p className="productDetailSpecp">
                           <span>Molecular Weight:</span>
-                          <span className="valueProduct"> 165.12</span>
+                          <span className="valueProduct">
+                            {product?.molecularWeight}
+                          </span>
                         </p>
                       </div>
                       <div className="col-md-4">
                         <p className="productDetailSpecp">
                           <span>Emperical Formula:</span>
-                          <span className="valueProduct">--</span>
+                          <span className="valueProduct">
+                            {product?.empiricalFormula}
+                          </span>
                         </p>
                       </div>
                       <div className="col-md-8">
                         <p className="productDetailSpecp">
                           <span>EC Number:</span>
                           <span className="valueProduct">
-                            C1=CC2=C(C=C1Br)C(=CC(=O)O2)O
+                            {product?.ecNumber}
                           </span>
                         </p>
                       </div>
                       <div className="col-md-4">
                         <p className="productDetailSpecp">
                           <span>MDL Number::</span>
-                          <span className="valueProduct">MFCD00239372</span>
+                          <span className="valueProduct">
+                            {product?.mdlNumber}
+                          </span>
                         </p>
                       </div>
                     </div>
@@ -158,50 +281,30 @@ const ProductDetail = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td scope="row">1/kg</td>
-                            <td>
-                              <p className="p-0 m-0">
-                                Available to ship on 28-02-2023
-                              </p>
-                              <p className="p-0 m-0">
-                                <small>
-                                  (Three weeks from Order Confirmation)
-                                </small>
-                              </p>
-                            </td>
-                            <td>
-                              <p className="price p-0 m-0">
-                                <span className="inr p-0 m-0">₹</span>
-                                <span>2,850</span>
-                              </p>
-                            </td>
-                            <td>
-                              <Counter />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td scope="row">500 grms</td>
-                            <td>
-                              <p className="p-0 m-0">
-                                Available to ship on 28-02-2023
-                              </p>
-                              <p className="p-0 m-0">
-                                <small>
-                                  (Three weeks from Order Confirmation)
-                                </small>
-                              </p>
-                            </td>
-                            <td>
-                              <p className="price p-0 m-0">
-                                <span className="inr p-0 m-0">₹</span>
-                                <span>5,650</span>
-                              </p>
-                            </td>
-                            <td>
-                              <Counter />
-                            </td>
-                          </tr>
+                          {product.skus.map((sku, index) => (
+                            <tr key={sku.id}>
+                              <td scope="row">{sku.packSizeValue}</td>
+                              <td>
+                                <p className="p-0 m-0">
+                                  Available to ship on {sku.availableDate}
+                                </p>
+                                <p className="p-0 m-0">
+                                  <small>
+                                    (Three weeks from Order Confirmation)
+                                  </small>
+                                </p>
+                              </td>
+                              <td>
+                                <p className="price p-0 m-0">
+                                  <span className="inr p-0 m-0">₹</span>
+                                  <span>{sku.priceInr}</span>
+                                </p>
+                              </td>
+                              <td>
+                                <Counter />
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>
@@ -294,51 +397,54 @@ const ProductDetail = () => {
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Product Number</dt>
-                        <dd>CP10087</dd>
+                        <dd>{product.productId}</dd>
                       </div>
                     </div>
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Purity / Analysis Method</dt>
                         <dd>
-                          <span class="icon-rightarrow3"></span> NLT 98 %
+                          <span class="icon-rightarrow3"></span>{" "}
+                          {product.purity}
                         </dd>
                       </div>
                     </div>
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Molecular Formula / Molecular Weight</dt>
-                        <dd>241.04 g/mol</dd>
+                        <dd>{product.molecularWeight}</dd>
                       </div>
                     </div>
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Physical State (20 deg.C)</dt>
-                        <dd>Solid</dd>
+                        <dd>{product?.generalInformation?.physicalState}</dd>
                       </div>
                     </div>
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Packaging and Container</dt>
-                        <dd>--</dd>
+                        <dd>
+                          {product?.generalInformation?.packagingContainer}
+                        </dd>
                       </div>
                     </div>
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>CAS RN</dt>
-                        <dd>--</dd>
+                        <dd>{product?.generalInformation?.casRn} </dd>
                       </div>
                     </div>
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Reaxys Registry Number</dt>
-                        <dd>--</dd>
+                        <dd>{product?.generalInformation?.reaxysNumber}</dd>
                       </div>
                     </div>
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>PubChem Substance ID</dt>
-                        <dd>--</dd>
+                        <dd>{product?.generalInformation?.sdbsId}</dd>
                       </div>
                     </div>
                     <div className="col-md-3">
@@ -350,13 +456,13 @@ const ProductDetail = () => {
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Merck Index (14)</dt>
-                        <dd>--</dd>
+                        <dd>{product?.generalInformation?.merckIndex}</dd>
                       </div>
                     </div>
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>MDL Number</dt>
-                        <dd>MFCD00239372</dd>
+                        <dd>{product?.mdlNumber}</dd>
                       </div>
                     </div>
                   </div>
@@ -377,19 +483,27 @@ const ProductDetail = () => {
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Appearance</dt>
-                        <dd>offwhite to yellow</dd>
+                        <dd>
+                          {product?.specification?.image && (
+                            <img
+                              src={product?.specification?.image}
+                              alt="Product"
+                              style={{ width: "100px", marginTop: "10px" }}
+                            />
+                          )}
+                        </dd>
                       </div>
                     </div>
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Purity(HPLC)</dt>
-                        <dd>NLT 98%</dd>
+                        <dd>{product?.specification?.purityHplc}</dd>
                       </div>
                     </div>
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Purity(Neutralization titration)</dt>
-                        <dd>--</dd>
+                        <dd>{product?.specification?.purityTitration}</dd>
                       </div>
                     </div>
                   </div>
@@ -400,19 +514,19 @@ const ProductDetail = () => {
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Melting Point</dt>
-                        <dd>230 - 232 °C</dd>
+                        <dd>{product?.specification?.meltingPoint}</dd>
                       </div>
                     </div>
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Solubility in water</dt>
-                        <dd>--</dd>
+                        <dd>{product?.specification?.solubilityWater}</dd>
                       </div>
                     </div>
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Solubility (soluble in)</dt>
-                        <dd>--</dd>
+                        <dd>{product?.specification?.solubilityOther}</dd>
                       </div>
                     </div>
                   </div>
@@ -432,13 +546,13 @@ const ProductDetail = () => {
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Signal Word</dt>
-                        <dd>H319</dd>
+                        <dd>{product?.safetyRegulation?.ghsSignalWord}</dd>
                       </div>
                     </div>
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Hazard Statements</dt>
-                        <dd>Eye Irrit. 2</dd>
+                        <dd>{product?.safetyRegulation?.hazardStatements}</dd>
                       </div>
                     </div>
                     <div className="col-md-12">
@@ -501,7 +615,7 @@ const ProductDetail = () => {
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Related Laws:</dt>
-                        <dd>RTECS#</dd>
+                        <dd>{product?.safetyRegulation?.rtecs}</dd>
                       </div>
                     </div>
                     <div className="col-md-3">
@@ -527,7 +641,40 @@ const ProductDetail = () => {
                     <div className="col-md-12">
                       <div className="sectionListItem">
                         <dt>Applications</dt>
-                        <dd>No Data</dd>
+                        <div className="contentApplications">
+                          {product?.applications &&
+                          product.applications.length > 0 ? (
+                            <ul>
+                              {product.applications.map(
+                                (application, index) => (
+                                  <li key={index} className="application-item">
+                                    <p>
+                                      <strong>Application Name:</strong>{" "}
+                                      {application.applicationName}
+                                    </p>
+                                    <p>
+                                      <strong>File:</strong>
+                                      {application.file ? (
+                                        <a
+                                          href={application.file}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                        >
+                                          {application.file.split("/").pop()}{" "}
+                                          {/* Display file name */}
+                                        </a>
+                                      ) : (
+                                        "No File Available"
+                                      )}
+                                    </p>
+                                  </li>
+                                )
+                              )}
+                            </ul>
+                          ) : (
+                            <p>No Data</p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -584,51 +731,78 @@ const ProductDetail = () => {
         <div className="offcanvas-body">
           <h5 className="text-center">{pageName}</h5>
 
-          <form className="requestbuilk-form">
+          <form className="requestbuilk-form" onSubmit={handleSubmit}>
             <div className="form-floating mb-3">
               <input
                 type="text"
-                className="form-control"
+                className={`form-control ${errors.company ? "is-invalid" : ""}`}
                 id="Company"
                 placeholder="Company Name"
+                value={formData.company}
+                onChange={handleChange}
               />
-              <label for="Company">Company Name</label>
+              <label htmlFor="Company">Company Name</label>
+              {errors.company && (
+                <div className="invalid-feedback">{errors.company}</div>
+              )}
             </div>
             <div className="form-floating mb-3">
               <input
                 type="text"
-                className="form-control"
+                className={`form-control ${errors.contact ? "is-invalid" : ""}`}
                 id="Contact"
                 placeholder="Contact Name"
+                value={formData.contact}
+                onChange={handleChange}
               />
-              <label for="Contact">Contact Name</label>
+              <label htmlFor="Contact">Contact Name</label>
+              {errors.contact && (
+                <div className="invalid-feedback">{errors.contact}</div>
+              )}
             </div>
             <div className="form-floating mb-3">
               <input
                 type="email"
-                className="form-control"
+                className={`form-control ${errors.email ? "is-invalid" : ""}`}
                 id="Email"
                 placeholder="Official Email"
+                value={formData.email}
+                onChange={handleChange}
               />
-              <label for="Email">Official Email</label>
+              <label htmlFor="Email">Official Email</label>
+              {errors.email && (
+                <div className="invalid-feedback">{errors.email}</div>
+              )}
             </div>
             <div className="form-floating mb-3">
               <input
                 type="number"
-                className="form-control"
+                className={`form-control ${errors.phone ? "is-invalid" : ""}`}
                 id="Phone"
                 placeholder="Phone or Mobile"
+                value={formData.phone}
+                onChange={handleChange}
               />
-              <label for="Phone">Phone or Mobile</label>
+              <label htmlFor="Phone">Phone or Mobile</label>
+              {errors.phone && (
+                <div className="invalid-feedback">{errors.phone}</div>
+              )}
             </div>
             <div className="form-floating mb-3">
               <input
                 type="number"
-                className="form-control"
+                className={`form-control ${
+                  errors.quantity ? "is-invalid" : ""
+                }`}
                 id="Quantity"
                 placeholder="Quantity"
+                value={formData.quantity}
+                onChange={handleChange}
               />
-              <label for="Quantity">Quantity</label>
+              <label htmlFor="Quantity">Quantity</label>
+              {errors.quantity && (
+                <div className="invalid-feedback">{errors.quantity}</div>
+              )}
             </div>
             <div className="form-floating">
               <textarea
@@ -636,15 +810,12 @@ const ProductDetail = () => {
                 placeholder="Message"
                 id="msg"
                 style={textareHeight}
+                value={formData.message}
+                onChange={handleChange}
               ></textarea>
-              <label for="msg">Comments</label>
+              <label htmlFor="msg">Comments</label>
             </div>
-            <button
-              className="green-btn border-0 w-100 mt-4"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#requestBulkOrder"
-              aria-controls="offcanvasRight"
-            >
+            <button type="submit" className="green-btn border-0 w-100 mt-4">
               Send Bulk Request
             </button>
           </form>

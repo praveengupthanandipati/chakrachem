@@ -10,6 +10,8 @@ const AdminProducts = () => {
   const [categoryData, setCategoryData] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState(""); // State to track selected category
+  const [searchCas, setSearchCas] = useState("");
+  const [searchProductName, setSearchProductName] = useState("");
 
   const navigate = useNavigate();
 
@@ -50,9 +52,10 @@ const AdminProducts = () => {
   }
 
   // Function to fetch products
-  const fetchProducts = async () => {
+  const fetchProducts = async (filters = {}) => {
     try {
-      const response = await fetch("http://localhost:8080/api/products/list");
+      const query = new URLSearchParams(filters).toString();
+      const response = await fetch(`http://localhost:8080/api/products/list?${query}`);
       if (!response.ok) {
         throw new Error("Failed to fetch products");
       }
@@ -97,9 +100,19 @@ const AdminProducts = () => {
 
   // Handle category change
   const handleCategoryChange = (categoryId) => {
-    console.log(categoryId,"categoryId");
+    console.log(categoryId, "categoryId");
     setSelectedCategoryId(categoryId); // Set the selectedCategoryId to the provided category id
     fetchSubCategoriesById(categoryId); // Fetch subcategories based on the category id
+  };
+
+  // Handle search functionality
+  const handleSearch = () => {
+    const filters = {
+      categoryId: selectedCategoryId,
+      cas: searchCas,
+      productName: searchProductName
+    };
+    fetchProducts(filters);
   };
 
   return (
@@ -156,6 +169,8 @@ const AdminProducts = () => {
                             className="form-control"
                             id="casname"
                             placeholder="Search by CAS"
+                            value={searchCas}
+                            onChange={(e) => setSearchCas(e.target.value)}
                             aria-label=".form-control-sm example"
                           />
                         </div>
@@ -167,12 +182,18 @@ const AdminProducts = () => {
                             className="form-control"
                             id="ProductName"
                             placeholder="Search by Product Name"
+                            value={searchProductName}
+                            onChange={(e) => setSearchProductName(e.target.value)}
                             aria-label=".form-control-sm example"
                           />
                         </div>
                       </div>
                       <div className="col-md-2">
-                        <button type="button" className="btn btn-primary mt-1">
+                        <button
+                          type="button"
+                          className="btn btn-primary mt-1"
+                          onClick={handleSearch}
+                        >
                           Search
                         </button>
                       </div>

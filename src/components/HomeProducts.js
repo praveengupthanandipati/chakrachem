@@ -1,65 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Ally, Autoplay } from "swiper/modules";
-import product01 from "../assets/img/products/1702205754.png";
-import product02 from "../assets/img/products/1702205780.png";
-import product03 from "../assets/img/products/1702205809.png";
-import product04 from "../assets/img/products/1702205901.png";
-import product05 from "../assets/img/products/1702205928.png";
-import product06 from "../assets/img/products/1702205969.png";
-import product07 from "../assets/img/products/17022053491.png";
+import { Pagination } from "swiper/modules";
+import { Link } from "react-router-dom"; // Import Link for navigation
 
 const HomeProducts = () => {
-  const ProductItem = [
-    {
-      id: 1,
-      ImageName: product01,
-      CasNumber: "615-94-1",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
-    },
-    {
-      id: 2,
-      ImageName: product02,
-      CasNumber: "615-94-1",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
-    },
-    {
-      id: 3,
-      ImageName: product03,
-      CasNumber: "82671-06-5",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
-    },
-    {
-      id: 4,
-      ImageName: product04,
-      CasNumber: "608-31-1",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
-    },
-    {
-      id: 5,
-      ImageName: product05,
-      CasNumber: "3392-97-0",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
-    },
-    {
-      id: 6,
-      ImageName: product06,
-      CasNumber: "3430-21-5",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
-    },
-    {
-      id: 7,
-      ImageName: product07,
-      CasNumber: "5154-00-7",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
-    },
-    {
-      id: 8,
-      ImageName: product01,
-      CasNumber: "1501185-00-7",
-      ProductName: `2,4-Dimethoxybenzaldehyde`,
-    },
-  ];
+  const [products, setProducts] = useState([]);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/products/list");
+      if (!response.ok) {
+        throw new Error("Failed to fetch products");
+      }
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   return (
     <div>
       <Swiper
@@ -85,19 +48,19 @@ const HomeProducts = () => {
         modules={[Pagination]}
         className="mySwiper productSwiper"
       >
-        {ProductItem.map((item) => (
+        {products.map((item) => (
           <SwiperSlide key={item.id}>
             <div className="productItem shadow">
-              <a to="">
+              <Link to={`/ProductDetail/${item.id}`}>
                 <img
-                  src={item.ImageName}
-                  alt={item.ImageName}
+                  src={item.image}
+                  alt={item.name} // Changed alt text to item.name for better accessibility
                   className="productItem__image"
                 />
-              </a>
-              <div className="productItem__casnumber">{item.CasNumber}</div>
+              </Link>
+              <div className="productItem__casnumber">{item.cas}</div>
               <div className="productItem__productName">
-                <a to="">{item.ProductName}</a>
+                <Link to={`/ProductDetail/${item.id}`}>{item.name}</Link> {/* Changed to Link for navigation */}
               </div>
             </div>
           </SwiperSlide>

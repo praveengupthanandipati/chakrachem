@@ -1,5 +1,5 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, useParams } from "react-router-dom";
 import scrollToTop from "../includes/ScrollToTop";
 import product01 from "../assets/img/products/1702205754.png";
 import product02 from "../assets/img/products/1702205780.png";
@@ -12,104 +12,125 @@ import product07 from "../assets/img/products/17022053491.png";
 const ProductsList = () => {
   scrollToTop(); //page load move top
   let pageName = "Heterocyclic Building Blocks";
-  const ProductItem = [
-    {
-      id: 1,
-      ImageName: product01,
-      Weight: "500 Grams",
-      CasNumber: "615-94-1",
-      ProductName: `7-hydroxycoumarin`,
-      Price: "18,500",
-    },
-    {
-      id: 2,
-      ImageName: product02,
-      Weight: "200 Grams",
-      CasNumber: "615-94-1",
-      ProductName: `3-Acetylcoumarin`,
-      Price: "28,500",
-    },
-    {
-      id: 3,
-      ImageName: product03,
-      Weight: "50 Grams",
-      CasNumber: "82671-06-5",
-      ProductName: `6-Bromo-4-hydroxycoumarin`,
-      Price: "25,650",
-    },
-    {
-      id: 4,
-      ImageName: product04,
-      Weight: "60 Grams",
-      CasNumber: "608-31-1",
-      ProductName: `7-Amino-4-methylcoumarin`,
-      Price: "78,500",
-    },
-    {
-      id: 5,
-      ImageName: product05,
-      Weight: "500 Grams",
-      CasNumber: "3392-97-0",
-      ProductName: `7-Diethylamino-4-methylco...`,
-      Price: "7,850",
-    },
-    {
-      id: 6,
-      ImageName: product06,
-      Weight: "750 Grams",
-      CasNumber: "3430-21-5",
-      ProductName: `7-Hydroxy-4-(trifluoromet...`,
-      Price: "35,000",
-    },
-    {
-      id: 7,
-      ImageName: product07,
-      Weight: "500 Grams",
-      CasNumber: "5154-00-7",
-      ProductName: `7-Methylcoumarin`,
-      Price: "32,000",
-    },
-    {
-      id: 8,
-      ImageName: product01,
-      Weight: "200 Grams",
-      CasNumber: "1501185-00-7",
-      ProductName: `Coumestrol`,
-      Price: "42,000",
-    },
-    {
-      id: 9,
-      ImageName: product01,
-      Weight: "250 Grams",
-      CasNumber: "615-94-1",
-      ProductName: `4-Hydroxylthiocoumarin`,
-      Price: "45,000",
-    },
-    {
-      id: 10,
-      ImageName: product02,
-      Weight: "400 Grams",
-      CasNumber: "615-94-1",
-      ProductName: `N-Succinimidyl 7-Hydroxy..`,
-      Price: " 58,000",
-    },
-    {
-      id: 11,
-      ImageName: product03,
-      Weight: "100 Grams",
-      CasNumber: "82671-06-5",
-      ProductName: `8-Bromo-6-Chloro-3-Cyano..`,
-      Price: "250,000",
-    },
-    {
-      id: 12,
-      ImageName: product04,
-      Weight: "500 Grams",
-      CasNumber: "608-31-1",
-      ProductName: `8-Acetyl-7-hydroxy-2H-chr..`,
-      Price: "89,501",
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams(); // Get the product ID from URL params
+
+  const fetchProducts = async (filters = {}) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/products/getProductListBySubCategory/${id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch products");
+      }
+      const data = await response.json();
+      setProducts(data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  useEffect(()=>{
+    fetchProducts();
+  },[])
+  // const ProductItem = [
+  //   {
+  //     id: 1,
+  //     ImageName: product01,
+  //     Weight: "500 Grams",
+  //     CasNumber: "615-94-1",
+  //     ProductName: `7-hydroxycoumarin`,
+  //     Price: "18,500",
+  //   },
+  //   {
+  //     id: 2,
+  //     ImageName: product02,
+  //     Weight: "200 Grams",
+  //     CasNumber: "615-94-1",
+  //     ProductName: `3-Acetylcoumarin`,
+  //     Price: "28,500",
+  //   },
+  //   {
+  //     id: 3,
+  //     ImageName: product03,
+  //     Weight: "50 Grams",
+  //     CasNumber: "82671-06-5",
+  //     ProductName: `6-Bromo-4-hydroxycoumarin`,
+  //     Price: "25,650",
+  //   },
+  //   {
+  //     id: 4,
+  //     ImageName: product04,
+  //     Weight: "60 Grams",
+  //     CasNumber: "608-31-1",
+  //     ProductName: `7-Amino-4-methylcoumarin`,
+  //     Price: "78,500",
+  //   },
+  //   {
+  //     id: 5,
+  //     ImageName: product05,
+  //     Weight: "500 Grams",
+  //     CasNumber: "3392-97-0",
+  //     ProductName: `7-Diethylamino-4-methylco...`,
+  //     Price: "7,850",
+  //   },
+  //   {
+  //     id: 6,
+  //     ImageName: product06,
+  //     Weight: "750 Grams",
+  //     CasNumber: "3430-21-5",
+  //     ProductName: `7-Hydroxy-4-(trifluoromet...`,
+  //     Price: "35,000",
+  //   },
+  //   {
+  //     id: 7,
+  //     ImageName: product07,
+  //     Weight: "500 Grams",
+  //     CasNumber: "5154-00-7",
+  //     ProductName: `7-Methylcoumarin`,
+  //     Price: "32,000",
+  //   },
+  //   {
+  //     id: 8,
+  //     ImageName: product01,
+  //     Weight: "200 Grams",
+  //     CasNumber: "1501185-00-7",
+  //     ProductName: `Coumestrol`,
+  //     Price: "42,000",
+  //   },
+  //   {
+  //     id: 9,
+  //     ImageName: product01,
+  //     Weight: "250 Grams",
+  //     CasNumber: "615-94-1",
+  //     ProductName: `4-Hydroxylthiocoumarin`,
+  //     Price: "45,000",
+  //   },
+  //   {
+  //     id: 10,
+  //     ImageName: product02,
+  //     Weight: "400 Grams",
+  //     CasNumber: "615-94-1",
+  //     ProductName: `N-Succinimidyl 7-Hydroxy..`,
+  //     Price: " 58,000",
+  //   },
+  //   {
+  //     id: 11,
+  //     ImageName: product03,
+  //     Weight: "100 Grams",
+  //     CasNumber: "82671-06-5",
+  //     ProductName: `8-Bromo-6-Chloro-3-Cyano..`,
+  //     Price: "250,000",
+  //   },
+  //   {
+  //     id: 12,
+  //     ImageName: product04,
+  //     Weight: "500 Grams",
+  //     CasNumber: "608-31-1",
+  //     ProductName: `8-Acetyl-7-hydroxy-2H-chr..`,
+  //     Price: "89,501",
+  //   },
+  // ];
   return (
     <main className="subpageMain">
       <section className="subpageHeader">
@@ -139,24 +160,24 @@ const ProductsList = () => {
       <section className="subPageBody">
         <div className="container">
           <div className="row">
-            {ProductItem.map((item) => (
+            {products.map((item) => (
               <div className="col-md-3" key={item.id}>
                 <div className="productItem shadow mb-3">
                   <span className="productItem__Weight">{item.Weight}</span>
-                  <NavLink to="/ProductDetail">
+                  <NavLink to={`/ProductDetail/${item.id}`}>
                     <img
-                      src={item.ImageName}
-                      alt={item.ImageName}
+                      src={item.image}
+                      alt={item.image}
                       className="productItem__image"
                     />
                   </NavLink>
-                  <div className="productItem__casnumber">{item.CasNumber}</div>
+                  <div className="productItem__casnumber">{item.cas}</div>
                   <div className="productItem__productName">
-                    <NavLink to="/ProductDetail">{item.ProductName}</NavLink>
+                    <NavLink to="/ProductDetail">{item.name}</NavLink>
                   </div>
                   <p className="text-center font-semibold font-primarylight">
                     <span class="productItem__currency">₹</span>
-                    {item.Price}
+                    {item.price}
                   </p>
                 </div>
               </div>

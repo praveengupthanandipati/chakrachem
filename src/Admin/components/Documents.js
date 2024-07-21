@@ -1,24 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Documents = ({ documents, onDocumentsChange }) => {
+  const [isFormValid, setIsFormValid] = useState(true);
+
   const handleDocumentNameChange = (e, index) => {
     const newDocuments = [...documents];
     newDocuments[index].documentName = e.target.value;
     onDocumentsChange(newDocuments);
+    validateForm(newDocuments);
   };
 
-  const handleFileChange = (e, index) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      const newDocuments = [...documents];
-      newDocuments[index].fileContent = reader.result.split(',')[1]; // Base64 content
-      onDocumentsChange(newDocuments);
-    };
-
-    if (file) {
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
       reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        resolve(reader.result.split(',')[1]); // Return base64 without data URL prefix
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  const handleFileChange = async (e, index) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.type !== 'application/pdf') {
+        alert('Only PDF files are allowed.');
+        return;
+      }
+      try {
+        const base64 = await getBase64(file);
+        const newDocuments = [...documents];
+        newDocuments[index] = {
+          ...newDocuments[index],
+          fileContent: base64,
+          fileType: file.type,
+          fileName: file.name,
+        };
+        onDocumentsChange(newDocuments);
+        validateForm(newDocuments);
+      } catch (error) {
+        console.error('Error converting file to base64:', error);
+      }
     }
   };
 
@@ -26,10 +53,41 @@ const Documents = ({ documents, onDocumentsChange }) => {
     const newDocuments = [...documents];
     newDocuments.splice(index, 1);
     onDocumentsChange(newDocuments);
+    validateForm(newDocuments);
   };
 
   const handleAddDocument = () => {
-    onDocumentsChange([...documents, { documentName: '', fileContent: '' }]);
+    if (isFormValid) {
+      onDocumentsChange([...documents, { documentName: '', fileContent: '', fileType: '', fileName: '' }]);
+    }
+  };
+
+  const validateForm = (documents) => {
+    const isValid = documents.every(doc => doc.documentName || doc.fileContent);
+    setIsFormValid(isValid);
+  };
+
+  const downloadDocument = (fileContent, documentName, fileType) => {
+    // Ensure the file type is PDF
+    const mimeType = fileType || 'application/pdf';
+
+    // Decode base64 and create a Blob
+    const binaryString = window.atob(fileContent);
+    const binaryLen = binaryString.length;
+    const bytes = new Uint8Array(binaryLen);
+    for (let i = 0; i < binaryLen; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: mimeType });
+
+    // Create a temporary link and trigger the download
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = (documentName || 'document') + (mimeType === 'application/pdf' ? '.pdf' : '');
+    document.body.appendChild(link); // Required for Firefox
+    link.click();
+    document.body.removeChild(link); // Clean up
+    URL.revokeObjectURL(link.href); // Clean up
   };
 
   return (
@@ -51,6 +109,7 @@ const Documents = ({ documents, onDocumentsChange }) => {
                 value={document.documentName}
                 onChange={(e) => handleDocumentNameChange(e, index)}
               />
+            
             </div>
             <div className="col-md-5">
               <input
@@ -58,6 +117,33 @@ const Documents = ({ documents, onDocumentsChange }) => {
                 type="file"
                 onChange={(e) => handleFileChange(e, index)}
               />
+              {!document.documentName && document.fileContent && (
+                <div>
+                  <span>Name of the Document</span>
+                  <button
+                    type="button"
+                    className="btn btn-link"
+                    onClick={() => downloadDocument(document.fileContent, 'document', document.fileType)}
+                  >
+                    Download
+                  </button>
+                </div>
+              )}
+
+                {document.documentName && (
+                <div>
+                  <span>{document.documentName}</span>
+                  {document.fileContent && (
+                    <button
+                      type="button"
+                      className="btn btn-link"
+                      onClick={() => downloadDocument(document.fileContent, document.documentName, document.fileType)}
+                    >
+                      Download
+                    </button>
+                  )}
+                </div>
+                  )}
             </div>
             <div className="col-md-2">
               <button
@@ -75,9 +161,13 @@ const Documents = ({ documents, onDocumentsChange }) => {
         type="button"
         className="btn btn-primary"
         onClick={handleAddDocument}
+        disabled={!isFormValid}
       >
         Add Document
       </button>
+      {!isFormValid && (
+        <div className="text-danger mt-2">Please provide document names or upload files before adding new documents.</div>
+      )}
     </div>
   );
 };

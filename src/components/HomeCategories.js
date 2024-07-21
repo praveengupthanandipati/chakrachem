@@ -1,99 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import HomeCatItem from "../components/HomeCatItem";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Ally, Autoplay } from "swiper/modules";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { useNavigate } from "react-router-dom";
 
 const HomeCategories = () => {
-  const categories = [
-    {
-      id: 1,
-      CatTitle: "Flavones & Flavanones",
-      CatDesc:
-        "Chakra Chem manufactures high-quality Flavones & Flavanones chemicals for diverse industrial applications, ensuring reliability and innovation.",
-      CatLink: "",
-    },
-    {
-      id: 2,
-      CatTitle: "Fine Chemicals",
-      CatDesc:
-        "Chakra Chem produces high-quality fine chemicals, ensuring precision, reliability, and innovation for diverse industrial applications.",
-      CatLink: "",
-    },
-    {
-      id: 3,
-      CatTitle: "Coumarin - Chalcones",
-      CatDesc:
-        "Chakra Chem specializes in producing high-quality Coumarins and Chalcones for various industrial applications, ensuring reliability.",
-      CatLink: "",
-    },
-    {
-      id: 4,
-      CatTitle: "API Intermediate",
-      CatDesc:
-        "Chakra Chem manufactures high-quality API Intermediates, ensuring reliability and innovation for pharmaceutical industry needs.",
-      CatLink: "",
-    },
-    {
-      id: 5,
-      CatTitle: "Flavones & Flavanones",
-      CatDesc:
-        "Chakra Chem manufactures high-quality Flavones & Flavanones chemicals for diverse industrial applications, ensuring reliability and innovation.",
-      CatLink: "",
-    },
-    {
-      id: 6,
-      CatTitle: "Fine Chemicals",
-      CatDesc:
-        "Chakra Chem produces high-quality fine chemicals, ensuring precision, reliability, and innovation for diverse industrial applications.",
-      CatLink: "",
-    },
-    {
-      id: 7,
-      CatTitle: "Coumarin - Chalcones",
-      CatDesc:
-        "Chakra Chem specializes in producing high-quality Coumarins and Chalcones for various industrial applications, ensuring reliability.",
-      CatLink: "",
-    },
-    {
-      id: 8,
-      CatTitle: "API Intermediate",
-      CatDesc:
-        "Chakra Chem manufactures high-quality API Intermediates, ensuring reliability and innovation for pharmaceutical industry needs.",
-      CatLink: "",
-    },
-  ];
+  const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/chakram/api/getAllCategories");
+        const data = await response.json();
+        setCategories(data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const handleCategoryClick = (categoryId) => {
+    navigate(`/Products/${categoryId}`);
+  };
+
   return (
     <div>
       <Swiper
         slidesPerView={1}
         spaceBetween={10}
-        pagination={{
-          clickable: true,
-        }}
+        pagination={{ clickable: true }}
         breakpoints={{
-          640: {
-            slidesPerView: 2,
-            spaceBetween: 20,
-          },
-          768: {
-            slidesPerView: 4,
-            spaceBetween: 40,
-          },
-          1024: {
-            slidesPerView: 4,
-            spaceBetween: 20,
-          },
+          640: { slidesPerView: 2, spaceBetween: 20 },
+          768: { slidesPerView: 4, spaceBetween: 40 },
+          1024: { slidesPerView: 4, spaceBetween: 20 },
         }}
         modules={[Pagination]}
         className="mySwiper CategorySwiper"
       >
-        {categories.map((category, index) => (
-          <SwiperSlide>
-            <div className="shadow rounded mb-3 mb-lg-0">
+        {categories.map((category) => (
+          <SwiperSlide key={category.id}>
+            <div
+              className="shadow rounded mb-3 mb-lg-0"
+              onClick={() => handleCategoryClick(category.id)}
+            >
               <HomeCatItem
-                CatTitle={category.CatTitle}
-                CatDesc={category.CatDesc}
-                CatLink={category.CatLink}
+                CatTitle={category.name}
+                CatDesc={category.description}
+                CatLink={`/Products/${category.id}`}
               />
             </div>
           </SwiperSlide>

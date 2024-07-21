@@ -14,9 +14,10 @@ const AdminSubcategories = () => {
   const [status, setStatus] = useState(true);
   const [errors, setErrors] = useState({});
   const [categories, setCategories] = useState([]);
+  const [noSubCategoriesMessage, setNoSubCategoriesMessage] = useState("");
 
   async function handleDelete(id) {
-    const confirmDelete = window.confirm("Are you sure you want to delete this category?");
+    const confirmDelete = window.confirm("Are you sure you want to delete this subcategory?");
     if (!confirmDelete) {
       return;
     }
@@ -28,18 +29,19 @@ const AdminSubcategories = () => {
       if (response.ok) {
         const updatedCategories = subCategoryData.filter(category => category.id !== id);
         setSubCategoryData(updatedCategories);
-        setDeleteMessage("Deleted Category Successfully");
-          window.location.reload();
+        setDeleteMessage("Deleted Subcategory Successfully");
+        setTimeout(() => {
+          setDeleteMessage('');
+        }, 3000);
       } else {
-        setDeleteMessage("Failed to delete Category");
+        setDeleteMessage("Failed to delete Subcategory");
       }
     } catch (error) {
-      setDeleteMessage("Failed to delete Category");
+      setDeleteMessage("Failed to delete Subcategory");
+      setTimeout(() => {
+        setDeleteMessage('');
+      }, 3000);
     }
-    setTimeout(() => {
-      setDeleteMessage('');
-    }, 3000);
-
   }
 
   async function handleSave(event) {
@@ -63,7 +65,6 @@ const AdminSubcategories = () => {
         categoryId: catId,
       };
 
-
       if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
         return;
@@ -81,10 +82,10 @@ const AdminSubcategories = () => {
       );
 
       if (response.ok) {
-        if (catId != null) {
-          setSaveMessage("Category Updated Successfully");
+        if (subCatId != null) {
+          setSaveMessage("Subcategory Updated Successfully");
         } else {
-          setSaveMessage("Category Saved Successfully");
+          setSaveMessage("Subcategory Saved Successfully");
         }
         setTimeout(() => {
           window.location.reload();
@@ -106,7 +107,6 @@ const AdminSubcategories = () => {
     }
   }
 
-
   async function fetchCategories() {
     const response = await fetch(
       "http://localhost:8080/chakram/api/getAllCategories"
@@ -124,7 +124,13 @@ const AdminSubcategories = () => {
       const response = await axios.get(
         `http://localhost:8080/chakram/api/getSubCategoriesById/${categoryId}`
       );
-      setSubCategoryData(response.data);
+      const subCategories = response.data;
+      setSubCategoryData(subCategories);
+      if (subCategories.length === 0) {
+        setNoSubCategoriesMessage("No subcategories found for this category.");
+      } else {
+        setNoSubCategoriesMessage("");
+      }
     } catch (error) {
       console.error("There was an error fetching the subcategories!", error);
     }
@@ -141,7 +147,6 @@ const AdminSubcategories = () => {
   };
 
   async function handleEdit(id) {
-    console.log(id,"id");
     try {
       const response = await fetch(
         `http://localhost:8080/chakram/api/getSubCatById/${id}`
@@ -156,7 +161,6 @@ const AdminSubcategories = () => {
     }
   }
   
-
   return (
     <section className="admin-main">
       <div className="admin-container">
@@ -166,7 +170,8 @@ const AdminSubcategories = () => {
             <div className="row">
               <div className="col-md-8">
                 <div className="card bg-white rounded shadow p-4 card-container">
-                {deleteMessage && <p className="alert alert-info">{deleteMessage}</p>}
+                  {deleteMessage && <p className="alert alert-info">{deleteMessage}</p>}
+                  {noSubCategoriesMessage && <p className="alert alert-info">{noSubCategoriesMessage}</p>}
 
                   <div className="mb-3">
                     <label htmlFor="category" className="form-label">
@@ -199,37 +204,43 @@ const AdminSubcategories = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {subCategoryData.map((item, index) => (
-                          <tr key={item.subCatId}>
-                            <td scope="row">{index + 1}</td>
-                            <td>{item.categoryName}</td>
-                            <td>{item.subCategoryName}</td>
-                            <td>
-                              <span
-                                style={{
-                                  color: item.status ? "green" : "red",
-                                }}
-                              >
-                                {item.status ? "Active" : "Inactive"}
-                              </span>
-                            </td>
-                            <td>
-                            <button
-                                onClick={() => handleEdit(item.subCatId)}
-                                className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                              >
-                                Edit
-                              </button>
-                              <span className="d-inline-block px-3">|</span>
-                              <button
-                                onClick={() => handleDelete(item.subCatId)}
-                                className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                              >
-                                Delete
-                              </button>
-                            </td>
+                        {subCategoryData.length === 0 ? (
+                          <tr>
+                            <td colSpan="5" className="text-center">No subcategories found.</td>
                           </tr>
-                        ))}
+                        ) : (
+                          subCategoryData.map((item, index) => (
+                            <tr key={item.subCatId}>
+                              <td scope="row">{index + 1}</td>
+                              <td>{item.categoryName}</td>
+                              <td>{item.subCategoryName}</td>
+                              <td>
+                                <span
+                                  style={{
+                                    color: item.status ? "green" : "red",
+                                  }}
+                                >
+                                  {item.status ? "Active" : "Inactive"}
+                                </span>
+                              </td>
+                              <td>
+                                <button
+                                  onClick={() => handleEdit(item.subCatId)}
+                                  className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                >
+                                  Edit
+                                </button>
+                                <span className="d-inline-block px-3">|</span>
+                                <button
+                                  onClick={() => handleDelete(item.subCatId)}
+                                  className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                >
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          ))
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -255,13 +266,14 @@ const AdminSubcategories = () => {
                           setErrors({ ...errors, categoryId: null });
                         }}
                       >
-                        <option selected>Select Category</option>
+                        <option value="">Select Category</option>
                         {categories.map((category) => (
                           <option key={category.id} value={category.id}>
                             {category.name}
                           </option>
                         ))}
                       </select>
+                      {errors.categoryId && <p className="text-danger">{errors.categoryId}</p>}
                     </div>
                     <div className="mb-3">
                       <label htmlFor="categpryname" className="form-label">
@@ -279,6 +291,7 @@ const AdminSubcategories = () => {
                         placeholder="Sub Category Name"
                         aria-label=".form-control-sm example"
                       />
+                      {errors.name && <p className="text-danger">{errors.name}</p>}
                     </div>
                     <div className="mb-3">
                       <label htmlFor="status" className="form-label">
@@ -290,12 +303,10 @@ const AdminSubcategories = () => {
                         id="status"
                         value={status}
                         onChange={(e) => {
-                          setStatus(e.target.value);
+                          setStatus(e.target.value === 'true');
                         }}
                       >
-                        <option selected value={true}>
-                          Active
-                        </option>
+                        <option value={true}>Active</option>
                         <option value={false}>Inactive</option>
                       </select>
                     </div>
