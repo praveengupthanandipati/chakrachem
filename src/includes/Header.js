@@ -80,6 +80,10 @@ const Header = () => {
     }
   };
 
+  const handleSearchIconClick = () => {
+    fetchCategories();
+  };
+
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
@@ -233,6 +237,7 @@ const Header = () => {
                       data-bs-toggle="offcanvas"
                       data-bs-target="#searchCanvas"
                       aria-controls="offcanvasTop"
+                      onClick={handleSearchIconClick}
                     >
                       <span className="icon-magnifier icomoon"></span>
                     </NavLink>

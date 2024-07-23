@@ -226,14 +226,14 @@ const AdminSubcategories = () => {
                               <td>
                                 <button
                                   onClick={() => handleEdit(item.subCatId)}
-                                  className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                  className="link-offset-2  btn btn-success link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                 >
                                   Edit
                                 </button>
                                 <span className="d-inline-block px-3">|</span>
                                 <button
                                   onClick={() => handleDelete(item.subCatId)}
-                                  className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                  className="link-offset-2 btn btn-danger link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                 >
                                   Delete
                                 </button>

@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import axios from "axios"; // Import axios for HTTP requests
+import axios from "axios";
 
 const AdminProducts = () => {
   let PageTitle = "Products";
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteMessage, setDeleteMessage] = useState("");
   const [categoryData, setCategoryData] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(""); // State to track selected category
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [searchCas, setSearchCas] = useState("");
   const [searchProductName, setSearchProductName] = useState("");
 
@@ -17,76 +18,70 @@ const AdminProducts = () => {
 
   useEffect(() => {
     fetchProducts();
-    fetchCategories(); // Fetch categories on component mount
+    fetchCategories();
   }, []);
 
-  // Function to fetch categories
-  async function fetchCategories() {
+  const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:8080/chakram/api/getAllCategories");
-      if (!response.ok) {
-        throw new Error("Failed to fetch categories");
-      }
+      const response = await fetch(
+        "http://localhost:8080/chakram/api/getAllCategories"
+      );
+      if (!response.ok) throw new Error("Failed to fetch categories");
+
       const data = await response.json();
       setCategoryData(data);
-      console.log("Fetched category data:", data);
-      if (data.length > 0) {
-        handleCategoryChange(data[0].id); // Fetch subcategories for the first category by default
-      }
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
-  }
+  };
 
-  // Function to fetch subcategories by categoryId
-  async function fetchSubCategoriesById(categoryId) {
+  const fetchSubCategoriesById = async (categoryId) => {
     try {
       const response = await axios.get(
         `http://localhost:8080/chakram/api/getSubCategoriesById/${categoryId}`
       );
       setSubCategoryData(response.data);
-      console.log("Fetched subcategory data:", response.data);
     } catch (error) {
       console.error("Error fetching subcategories:", error);
     }
-  }
+  };
 
-  // Function to fetch products
-  const fetchProducts = async (filters = {}) => {
+  const fetchProducts = async () => {
     try {
-      const query = new URLSearchParams(filters).toString();
-      const response = await fetch(`http://localhost:8080/api/products/list?${query}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch products");
-      }
+      const response = await fetch(`http://localhost:8080/api/products/list`);
+      if (!response.ok) throw new Error("Failed to fetch products");
+
       const data = await response.json();
       setProducts(data);
+      setFilteredProducts(data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
   };
 
-  // Handle edit product
   const handleEdit = (productId) => {
     navigate(`/Admin/New-Product/${productId}`);
   };
 
-  // Handle delete product
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this product?");
-    if (!confirmDelete) {
+    if (!window.confirm("Are you sure you want to delete this product?"))
       return;
-    }
+
     try {
       const response = await fetch(`http://localhost:8080/api/products/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
-      const data = await response.json();
 
+      const data = await response.json();
       if (response.ok) {
         setDeleteMessage(data.message || "Deleted Category Successfully");
-        setProducts((prevProducts) => prevProducts.filter(product => product.id !== id));
+        setProducts((prevProducts) =>
+          prevProducts.filter((product) => product.id !== id)
+        );
+        setFilteredProducts((prevProducts) =>
+          prevProducts.filter((product) => product.id !== id)
+        );
       } else {
         setDeleteMessage(data.message || "Failed to delete Category");
       }
@@ -94,26 +89,58 @@ const AdminProducts = () => {
       setDeleteMessage("Failed to delete Category");
     }
     setTimeout(() => {
-      setDeleteMessage('');
+      setDeleteMessage("");
     }, 3000);
   };
 
-  // Handle category change
   const handleCategoryChange = (categoryId) => {
-    console.log(categoryId, "categoryId");
-    setSelectedCategoryId(categoryId); // Set the selectedCategoryId to the provided category id
-    fetchSubCategoriesById(categoryId); // Fetch subcategories based on the category id
+    setSelectedCategoryId(categoryId);
+    fetchSubCategoriesById(categoryId);
+    applyFilters(categoryId, searchCas, searchProductName);
   };
 
-  // Handle search functionality
-  const handleSearch = () => {
-    const filters = {
-      categoryId: selectedCategoryId,
-      cas: searchCas,
-      productName: searchProductName
-    };
-    fetchProducts(filters);
+  const applyFilters = (categoryId, casNumber, productName) => {
+    let filtered = products;
+    if (categoryId) {
+      filtered = filtered.filter(
+        (product) => product.categoryId === categoryId
+      );
+    }
+    if (casNumber) {
+      filtered = filtered.filter((product) =>
+        product.cas.toLowerCase().includes(casNumber.toLowerCase())
+      );
+    }
+    if (productName) {
+      filtered = filtered.filter((product) =>
+        product.name.toLowerCase().includes(productName.toLowerCase())
+      );
+    }
+    setFilteredProducts(filtered);
   };
+
+  useEffect(() => {
+    applyFilters(selectedCategoryId, searchCas, searchProductName);
+  }, [selectedCategoryId, searchCas, searchProductName]);
+
+  const getCategoryNameById = (id) => {
+    console.log(categoryData, "categoryData");
+    console.log(id, "id");
+  
+    // Convert id to integer
+    const numericId = parseInt(id, 10);
+    
+    if (!categoryData || categoryData.length === 0) {
+      console.error("categoryData is empty or not loaded.");
+      return "Unknown";
+    }
+  
+    const category = categoryData.find(cat => cat.id === numericId);
+    console.log(category, "matched category");
+  
+    return category ? category.name : "Unknown";
+  };
+  
 
   return (
     <section className="admin-main">
@@ -135,7 +162,9 @@ const AdminProducts = () => {
                             aria-label="Default select example"
                             id="category"
                             value={selectedCategoryId}
-                            onChange={(e) => handleCategoryChange(e.target.value)}
+                            onChange={(e) =>
+                              setSelectedCategoryId(e.target.value)
+                            }
                           >
                             <option value="">Select Category</option>
                             {categoryData.map((category) => (
@@ -155,7 +184,10 @@ const AdminProducts = () => {
                           >
                             <option value="">Select Sub Category</option>
                             {subCategoryData.map((subcategory) => (
-                              <option key={subcategory.id} value={subcategory.id}>
+                              <option
+                                key={subcategory.id}
+                                value={subcategory.id}
+                              >
                                 {subcategory.subCategoryName}
                               </option>
                             ))}
@@ -183,19 +215,12 @@ const AdminProducts = () => {
                             id="ProductName"
                             placeholder="Search by Product Name"
                             value={searchProductName}
-                            onChange={(e) => setSearchProductName(e.target.value)}
+                            onChange={(e) =>
+                              setSearchProductName(e.target.value)
+                            }
                             aria-label=".form-control-sm example"
                           />
                         </div>
-                      </div>
-                      <div className="col-md-2">
-                        <button
-                          type="button"
-                          className="btn btn-primary mt-1"
-                          onClick={handleSearch}
-                        >
-                          Search
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -214,7 +239,6 @@ const AdminProducts = () => {
                 </div>
               </div>
 
-              {/* Products list table */}
               <div className="table-responsive">
                 <table className="table">
                   <thead className="table-dark">
@@ -237,16 +261,15 @@ const AdminProducts = () => {
                         </td>
                       </tr>
                     ) : (
-                      products.map((item) => (
+                      filteredProducts.map((item) => (
                         <tr key={item.id}>
                           <td scope="row">{item.id}</td>
                           <td>{item.name}</td>
-                          <td>{item.category}</td>
+                          <td>{getCategoryNameById(item.category)}</td>
                           <td>{item.code}</td>
                           <td>{item.cas}</td>
                           <td>{item.sku}</td>
                           <td>{item.status}</td>
-
                           <td>
                             <button
                               onClick={() => handleEdit(item.id)}
@@ -267,37 +290,10 @@ const AdminProducts = () => {
                     )}
                   </tbody>
                 </table>
-
-                <nav aria-label="Page navigation example">
-                  <ul className="pagination justify-content-end">
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        1
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        2
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        3
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
               </div>
+              {!loading && filteredProducts.length === 0 && (
+                <div className="text-center">No products found.</div>
+              )}
             </div>
           </section>
         </div>
