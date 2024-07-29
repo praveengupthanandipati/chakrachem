@@ -11,8 +11,13 @@ const AdminProducts = () => {
   const [categoryData, setCategoryData] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const [selectedSubCategoryId, setSelectedSubCategoryId] = useState("");
   const [searchCas, setSearchCas] = useState("");
   const [searchProductName, setSearchProductName] = useState("");
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const navigate = useNavigate();
 
@@ -75,7 +80,7 @@ const AdminProducts = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setDeleteMessage(data.message || "Deleted Category Successfully");
+        setDeleteMessage(data.message || "Deleted Product Successfully");
         setProducts((prevProducts) =>
           prevProducts.filter((product) => product.id !== id)
         );
@@ -83,10 +88,10 @@ const AdminProducts = () => {
           prevProducts.filter((product) => product.id !== id)
         );
       } else {
-        setDeleteMessage(data.message || "Failed to delete Category");
+        setDeleteMessage(data.message || "Failed to delete Product");
       }
     } catch (error) {
-      setDeleteMessage("Failed to delete Category");
+      setDeleteMessage("Failed to delete Product");
     }
     setTimeout(() => {
       setDeleteMessage("");
@@ -95,17 +100,47 @@ const AdminProducts = () => {
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategoryId(categoryId);
+    setSelectedSubCategoryId("");
     fetchSubCategoriesById(categoryId);
-    applyFilters(categoryId, searchCas, searchProductName);
+    applyFilters(
+      categoryId,
+      selectedSubCategoryId,
+      searchCas,
+      searchProductName
+    );
   };
 
-  const applyFilters = (categoryId, casNumber, productName) => {
+  const handleSubCategoryChange = (subCategoryId) => {
+    setSelectedSubCategoryId(subCategoryId);
+    applyFilters(
+      selectedCategoryId,
+      subCategoryId,
+      searchCas,
+      searchProductName
+    );
+  };
+
+  const applyFilters = (categoryId, subCategoryId, casNumber, productName) => {
     let filtered = products;
-    if (categoryId) {
+    console.log(filtered, "filtered");
+    console.log(categoryId, "categoryId");
+
+    // Convert categoryId and subCategoryId to numbers if needed
+    const numericCategoryId = categoryId ? Number(categoryId) : null;
+    const numericSubCategoryId = subCategoryId ? Number(subCategoryId) : null;
+
+    // Filter products
+    if (numericCategoryId !== null) {
       filtered = filtered.filter(
-        (product) => product.categoryId === categoryId
+        (product) => Number(product.category) === numericCategoryId
       );
     }
+    if (numericSubCategoryId !== null) {
+      filtered = filtered.filter(
+        (product) => Number(product.subCategoryId) === numericSubCategoryId
+      );
+    }
+
     if (casNumber) {
       filtered = filtered.filter((product) =>
         product.cas.toLowerCase().includes(casNumber.toLowerCase())
@@ -117,30 +152,42 @@ const AdminProducts = () => {
       );
     }
     setFilteredProducts(filtered);
+    setCurrentPage(1); // Reset to the first page when filters are applied
   };
 
   useEffect(() => {
-    applyFilters(selectedCategoryId, searchCas, searchProductName);
-  }, [selectedCategoryId, searchCas, searchProductName]);
+    applyFilters(
+      selectedCategoryId,
+      selectedSubCategoryId,
+      searchCas,
+      searchProductName
+    );
+  }, [selectedCategoryId, selectedSubCategoryId, searchCas, searchProductName]);
 
   const getCategoryNameById = (id) => {
-    console.log(categoryData, "categoryData");
-    console.log(id, "id");
-  
-    // Convert id to integer
     const numericId = parseInt(id, 10);
-    
+
     if (!categoryData || categoryData.length === 0) {
       console.error("categoryData is empty or not loaded.");
       return "Unknown";
     }
-  
-    const category = categoryData.find(cat => cat.id === numericId);
-    console.log(category, "matched category");
-  
+
+    const category = categoryData.find((cat) => cat.id === numericId);
     return category ? category.name : "Unknown";
   };
-  
+
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredProducts.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <section className="admin-main">
@@ -163,7 +210,7 @@ const AdminProducts = () => {
                             id="category"
                             value={selectedCategoryId}
                             onChange={(e) =>
-                              setSelectedCategoryId(e.target.value)
+                              handleCategoryChange(e.target.value)
                             }
                           >
                             <option value="">Select Category</option>
@@ -181,6 +228,10 @@ const AdminProducts = () => {
                             className="form-select form-control"
                             aria-label="Default select example"
                             id="subcategory"
+                            value={selectedSubCategoryId}
+                            onChange={(e) =>
+                              handleSubCategoryChange(e.target.value)
+                            }
                           >
                             <option value="">Select Sub Category</option>
                             {subCategoryData.map((subcategory) => (
@@ -261,7 +312,7 @@ const AdminProducts = () => {
                         </td>
                       </tr>
                     ) : (
-                      filteredProducts.map((item) => (
+                      currentItems.map((item) => (
                         <tr key={item.id}>
                           <td scope="row">{item.id}</td>
                           <td>{item.name}</td>
@@ -294,6 +345,27 @@ const AdminProducts = () => {
               {!loading && filteredProducts.length === 0 && (
                 <div className="text-center">No products found.</div>
               )}
+
+              {/* Pagination Controls */}
+              <div className="pagination-controls d-flex align-items-center gap-3">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className="btn btn-secondary"
+                >
+                  Previous
+                </button>
+                <span>
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  className="btn btn-secondary"
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </section>
         </div>

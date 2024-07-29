@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 
 const Applications = ({ applications, onApplicationsChange }) => {
@@ -116,6 +117,11 @@ const Applications = ({ applications, onApplicationsChange }) => {
                 type="file"
                 onChange={(e) => handleFileChange(e, index)}
               />
+              {application.fileName && (
+                <div>
+                  <small className="text-muted">{application.fileName}</small>
+                </div>
+              )}
               {!application.applicationName && application.fileContent && (
                 <div>
                   <span>Name of the Application</span>

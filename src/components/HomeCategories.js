@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import HomeCatItem from "../components/HomeCatItem";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
 
 const HomeCategories = () => {
@@ -26,6 +26,14 @@ const HomeCategories = () => {
     navigate(`/Products/${categoryId}`);
   };
 
+  // Helper function to limit description to 5 sentences
+  const truncateDescription = (description) => {
+    if (!description) return "No description available"; // Handle null or undefined
+
+    const sentences = description.split(/(?<=[.!?])\s+/); // Split by sentence end
+    return sentences.slice(0, 2).join(" ");
+  };
+
   return (
     <div>
       <Swiper
@@ -48,7 +56,7 @@ const HomeCategories = () => {
             >
               <HomeCatItem
                 CatTitle={category.name}
-                CatDesc={category.description}
+                CatDesc={truncateDescription(category.description)}
                 CatLink={`/Products/${category.id}`}
               />
             </div>

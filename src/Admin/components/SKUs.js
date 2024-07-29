@@ -9,6 +9,8 @@ const SKUs = ({ skus, onSkusChange }) => {
       newSkus[index][key] = value;
     }
     onSkusChange(newSkus);
+
+    console.log(newSkus,"newSkus");
   };
   
 

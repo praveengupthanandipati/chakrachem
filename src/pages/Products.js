@@ -9,6 +9,8 @@ const Products = () => {
   const { id } = useParams(); // Get category ID from URL
   const [subCategoryData, setSubCategoryData] = useState([]);
   const [pageName, setPageName] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchSubCategoriesById = async (categoryId) => {
@@ -21,16 +23,18 @@ const Products = () => {
         // Check if data has the expected structure
         if (Array.isArray(data)) {
           setSubCategoryData(data);
-
-          // Assuming `categoryName` is the first item in the data array
           setPageName(data.length > 0 ? data[0].categoryName : "No Category Name");
         } else {
           console.error("Unexpected API response format");
+          setError(true);
           setPageName("Error");
         }
       } catch (error) {
         console.error("Error fetching subcategories:", error);
+        setError(true);
         setPageName("Error");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -60,11 +64,15 @@ const Products = () => {
           </div>
         </div>       
       </section>
-      <img src={CategoryImg} alt="" className="img-fluid" />
+      <img src={CategoryImg} alt="Category Background" className="img-fluid" />
       <section className="subPageBody">
         <div className="container">
           <div className="category-list-items">
-            {subCategoryData.length > 0 ? (
+            {loading ? (
+              <p>Loading subcategories...</p>
+            ) : error ? (
+              <p>Error loading subcategories. Please try again later.</p>
+            ) : subCategoryData.length > 0 ? (
               subCategoryData.map((subcategory) => (
                 subcategory.status ? (
                   <NavLink key={subcategory.subCatId} to={`/ProductsList/${subcategory.subCatId}`}>
@@ -73,7 +81,7 @@ const Products = () => {
                 ) : null
               ))
             ) : (
-              <p>Loading subcategories...</p>
+              <p>No subcategories available.</p>
             )}
           </div>
         </div>

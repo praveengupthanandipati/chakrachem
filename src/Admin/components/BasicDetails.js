@@ -345,7 +345,7 @@ const BasicDetails = ({ basicDetails, onBasicDetailsChange }) => {
       </div>
       <div className="mb-3">
         <label htmlFor="productDescription" className="form-label">
-          Description
+        Synonym(s) / Description
         </label>
         <TextEditor
           id="productDescription"

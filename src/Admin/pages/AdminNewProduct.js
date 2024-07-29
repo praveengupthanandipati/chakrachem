@@ -129,6 +129,8 @@ const AdminNewProduct = () => {
   };
 
   const handleSkusChange = (newSkus) => {
+    console.log(newSkus,"skus");
+
     setSkus(newSkus);
   };
 
@@ -137,6 +139,7 @@ const AdminNewProduct = () => {
   };
 
   const handleSpecificationsChange = (newSpecifications) => {
+    console.log(newSpecifications,"newSpecifications");
     setSpecifications(newSpecifications);
   };
 
@@ -202,8 +205,7 @@ const AdminNewProduct = () => {
       documents.forEach((doc) => {
         if (
           !doc.documentName ||
-          !doc.fileType ||
-          !doc.fileName ||
+         
           !doc.fileContent
         ) {
           newValidationMessages.documents =
@@ -240,6 +242,7 @@ const AdminNewProduct = () => {
       }, 2000);
       return;
     }
+
 
     const formData = {
       productId: basicDetails.productId,
@@ -315,6 +318,8 @@ const AdminNewProduct = () => {
           },
           body: JSON.stringify(formData),
         });
+
+        console.log(JSON.stringify(formData),"JSON.stringify(formData)");
       } else {
         // Create new product
         response = await fetch("http://localhost:8080/api/products", {

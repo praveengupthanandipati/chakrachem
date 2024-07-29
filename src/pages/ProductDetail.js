@@ -106,7 +106,6 @@ const ProductDetail = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading product details.</p>;
 
-  let pageName = "7-hydroxycoumarin";
   const RelatedCategoryItem = [
     { CategoryItem: "Heterocyclic Building Blocks" },
     { CategoryItem: "Organic Building Blocks" },
@@ -121,13 +120,18 @@ const ProductDetail = () => {
     height: "100px",
   };
 
+  const extractHtmlTags = (text) => {
+    const doc = new DOMParser().parseFromString(text, "text/html");
+    return doc.body.textContent || "";
+  };
+
   return (
     <main className="subpageMain ProductDetail">
       <section className="subpageHeader">
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <h1 className="h1 p-0 m-0">{pageName}</h1>
+              <h1 className="h1 p-0 m-0">{product?.productName}</h1>
             </div>
           </div>
         </div>
@@ -146,7 +150,7 @@ const ProductDetail = () => {
             </li>
             <li>
               <NavLink to="">
-                <span className="active"> {pageName}</span>
+                <span className="active"> {product?.productName}</span>
               </NavLink>
             </li>
           </ul>
@@ -156,13 +160,12 @@ const ProductDetail = () => {
         <div className="container">
           <div className="row g-0">
             <div className="col-md-12">
-              {/*Poduct Detail start*/}
               <div className="row">
                 <div className="col-md-3">
                   <figure className="productDetailFigure">
                     <img
                       src={product.image}
-                      alt={pageName}
+                      alt={product?.productName}
                       className="img-fluid"
                     />
                   </figure>
@@ -198,30 +201,10 @@ const ProductDetail = () => {
                         <span className="icon-rightarrow2 d-inline px-3 align-self-center"></span>
                         <span>{product.subCategory}</span>
                       </p>
-                      <p className="Synonyms pb-2">
-                        <span className="font-semibold">Synonym(s):</span>
-                        <NavLink
-                          to=""
-                          target="_blank"
-                          className="small pe-2 d-inline-block"
-                        >
-                          Umbelliferone,
-                        </NavLink>
-                        <NavLink
-                          to=""
-                          target="_blank"
-                          className="small pe-2 d-inline-block"
-                        >
-                          7-Hydroxy-2H-chromen-2-one,
-                        </NavLink>
-                        <NavLink
-                          to=""
-                          target="_blank"
-                          className="small pe-2 d-inline-block"
-                        >
-                          Hydrangin
-                        </NavLink>
-                      </p>
+                      <div className="Synonyms flex items-center pb-2">
+                        <span className="font-semibold mr-2">Synonym(s):</span>
+                        <span>{extractHtmlTags(product.startDescription)}</span>
+                      </div>
                       <p className="font-bold font-secondary pb-1">
                         Purity: <span>{product?.purity}</span>
                       </p>
@@ -283,7 +266,9 @@ const ProductDetail = () => {
                         <tbody>
                           {product.skus.map((sku, index) => (
                             <tr key={sku.id}>
-                              <td scope="row">{sku.packSizeValue}</td>
+                              <td scope="row">
+                                {sku.packSizeValue} {sku.packSize}
+                              </td>
                               <td>
                                 <p className="p-0 m-0">
                                   Available to ship on {sku.availableDate}
@@ -483,15 +468,7 @@ const ProductDetail = () => {
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Appearance</dt>
-                        <dd>
-                          {product?.specification?.image && (
-                            <img
-                              src={product?.specification?.image}
-                              alt="Product"
-                              style={{ width: "100px", marginTop: "10px" }}
-                            />
-                          )}
-                        </dd>
+                        <dd>{product?.specification?.appearance}</dd>
                       </div>
                     </div>
                     <div className="col-md-3">
@@ -552,7 +529,11 @@ const ProductDetail = () => {
                     <div className="col-md-3">
                       <div className="sectionListItem">
                         <dt>Hazard Statements</dt>
-                        <dd>{product?.safetyRegulation?.hazardStatements}</dd>
+                        <dd>
+                          {extractHtmlTags(
+                            product?.safetyRegulation?.hazardStatements
+                          )}
+                        </dd>
                       </div>
                     </div>
                     <div className="col-md-12">
@@ -642,38 +623,24 @@ const ProductDetail = () => {
                       <div className="sectionListItem">
                         <dt>Applications</dt>
                         <div className="contentApplications">
-                          {product?.applications &&
-                          product.applications.length > 0 ? (
-                            <ul>
-                              {product.applications.map(
-                                (application, index) => (
-                                  <li key={index} className="application-item">
-                                    <p>
-                                      <strong>Application Name:</strong>{" "}
-                                      {application.applicationName}
-                                    </p>
-                                    <p>
-                                      <strong>File:</strong>
-                                      {application.file ? (
-                                        <a
-                                          href={application.file}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                        >
-                                          {application.file.split("/").pop()}{" "}
-                                          {/* Display file name */}
-                                        </a>
-                                      ) : (
-                                        "No File Available"
-                                      )}
-                                    </p>
-                                  </li>
-                                )
-                              )}
-                            </ul>
-                          ) : (
-                            <p>No Data</p>
-                          )}
+                          {product.applications.map((doc, index) => (
+                            <p key={index} className="pb-2">
+                              <NavLink
+                                to=""
+                                className="font-semibold font-secondary"
+                                onClick={() =>
+                                  downloadDocument(
+                                    doc.fileContent,
+                                    doc.applicationName,
+                                    doc.fileType
+                                  )
+                                }
+                              >
+                                <span className="icon-download2"></span>{" "}
+                                {doc.applicationName || "COA"}
+                              </NavLink>
+                            </p>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -729,7 +696,7 @@ const ProductDetail = () => {
           ></button>
         </div>
         <div className="offcanvas-body">
-          <h5 className="text-center">{pageName}</h5>
+          <h5 className="text-center">{product?.productName}</h5>
 
           <form className="requestbuilk-form" onSubmit={handleSubmit}>
             <div className="form-floating mb-3">

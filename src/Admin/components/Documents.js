@@ -109,7 +109,6 @@ const Documents = ({ documents, onDocumentsChange }) => {
                 value={document.documentName}
                 onChange={(e) => handleDocumentNameChange(e, index)}
               />
-            
             </div>
             <div className="col-md-5">
               <input
@@ -117,6 +116,11 @@ const Documents = ({ documents, onDocumentsChange }) => {
                 type="file"
                 onChange={(e) => handleFileChange(e, index)}
               />
+              {document.fileName && (
+                <div>
+                  <small className="text-muted">{document.fileName}</small>
+                </div>
+              )}
               {!document.documentName && document.fileContent && (
                 <div>
                   <span>Name of the Document</span>
@@ -130,7 +134,7 @@ const Documents = ({ documents, onDocumentsChange }) => {
                 </div>
               )}
 
-                {document.documentName && (
+              {document.documentName && (
                 <div>
                   <span>{document.documentName}</span>
                   {document.fileContent && (
@@ -143,7 +147,7 @@ const Documents = ({ documents, onDocumentsChange }) => {
                     </button>
                   )}
                 </div>
-                  )}
+              )}
             </div>
             <div className="col-md-2">
               <button
