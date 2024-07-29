@@ -32,7 +32,7 @@ const AdminNewProduct = () => {
   const [skus, setSkus] = useState([]);
   const [generalInfo, setGeneralInfo] = useState({
     physicalState: "",
-    packagingContainer: null,
+    packagingContainer: "",
     casRn: "",
     reaxysNumber: "",
     pubchemId: "",
@@ -40,7 +40,7 @@ const AdminNewProduct = () => {
     merckIndex: "",
   });
   const [specifications, setSpecifications] = useState({
-    image: null,
+    appearance:"",
     purityHPLC: "",
     purityNeutralization: "",
     meltingPoint: "",
@@ -58,6 +58,8 @@ const AdminNewProduct = () => {
   const [applications, setApplications] = useState([]);
   const [availability, setAvailability] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [validationMessages, setValidationMessages] = useState({
     basicDetails: true,
@@ -98,7 +100,6 @@ const AdminNewProduct = () => {
           category: product.category,
           subCategory: product.subCategory,
           productDescription: product.startDescription,
-          availability:product.availability
         });
         setDocuments(product.documents);
         setSkus(product.skus);
@@ -147,17 +148,95 @@ const AdminNewProduct = () => {
     setAvailability(e.target.value);
   };
 
+  const validateFields = () => {
+    let isValid = true;
+    const newValidationMessages = {};
+
+    // Basic Details validation
+    if (
+      !basicDetails.productId ||
+      !basicDetails.productName ||
+      !basicDetails.productPurity ||
+      !basicDetails.casNumber ||
+      !basicDetails.category ||
+      !basicDetails.subCategory ||
+      !basicDetails.productDescription
+    ) {
+      newValidationMessages.basicDetails =
+        "Please fill in all required basic details.";
+      isValid = false;
+    }
+
+    // General Information validation
+    if (
+      !generalInfo.physicalState ||
+      !generalInfo.packagingContainer ||
+      !generalInfo.casRn ||
+      !generalInfo.pubchemId
+    ) {
+      newValidationMessages.generalInfo =
+        "Please fill in all required general information.";
+      isValid = false;
+    }
+
+    // SKU validation
+    if (skus.length > 0) {
+      skus.forEach((sku) => {
+        if (
+          !sku.skuName ||
+          !sku.packSize ||
+          !sku.availableDate ||
+          !sku.packSizeValue ||
+          !sku.priceInr ||
+          !sku.priceUsd
+        ) {
+          newValidationMessages.skus =
+            "Please fill in all required SKU details.";
+          isValid = false;
+        }
+      });
+    }
+
+    // Documents validation
+    if (documents.length > 0) {
+      documents.forEach((doc) => {
+        if (
+          !doc.documentName ||
+          !doc.fileType ||
+          !doc.fileName ||
+          !doc.fileContent
+        ) {
+          newValidationMessages.documents =
+            "Please fill in all required document details.";
+          isValid = false;
+        }
+      });
+    }
+
+    // Applications validation
+    if (applications.length > 0) {
+      applications.forEach((app) => {
+        if (!app.applicationName || !app.fileContent) {
+          newValidationMessages.applications =
+            "Please fill in all required application details.";
+          isValid = false;
+        }
+      });
+    }
+
+    setValidationMessages(newValidationMessages);
+    return isValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check for validation
-    const allValid = Object.values(validationMessages).every(Boolean);
-    if (!allValid) {
-      setSuccessMessage("Please fill in all required fields.");
-      setShowSuccessMessage(true);
+    if (!validateFields()) {
+      setErrorMessage("Please fill in all required fields.");
+      setShowErrorMessage(true);
       setTimeout(() => {
-        setShowSuccessMessage(false);
-        setSuccessMessage("");
+        setShowErrorMessage(false);
+        setErrorMessage("");
       }, 2000);
       return;
     }
@@ -188,7 +267,7 @@ const AdminNewProduct = () => {
         skuName: sku.skuName,
         packSize: sku.packSize,
         availableDate: sku.availableDate,
-        packSizeValue:sku.packSizeValue,
+        packSizeValue: sku.packSizeValue,
         priceInr: sku.priceInr,
         priceUsd: sku.priceUsd,
       })),
@@ -204,7 +283,7 @@ const AdminNewProduct = () => {
       },
       specification: {
         id: specifications.id,
-        image: specifications.image,
+        appearance: specifications.appearance,
         purityHplc: specifications.purityHPLC,
         purityTitration: specifications.purityNeutralization,
         meltingPoint: specifications.meltingPoint,
@@ -268,13 +347,6 @@ const AdminNewProduct = () => {
     }
   };
 
-  const handleValidationChange = (section, isValid) => {
-    setValidationMessages((prevMessages) => ({
-      ...prevMessages,
-      [section]: isValid,
-    }));
-  };
-
   return (
     <section className="admin-main">
       <div className="admin-container">
@@ -286,64 +358,63 @@ const AdminNewProduct = () => {
               <BasicDetails
                 basicDetails={basicDetails}
                 onBasicDetailsChange={handleBasicDetailsChange}
-                onValidationChange={(isValid) =>
-                  handleValidationChange("basicDetails", isValid)
-                }
               />
+              {validationMessages.basicDetails && (
+                <div style={{ color: "red" }}>
+                  {validationMessages.basicDetails}
+                </div>
+              )}
 
               {/* Documents Section */}
               <Documents
                 documents={documents}
                 onDocumentsChange={handleDocumentsChange}
-                onValidationChange={(isValid) =>
-                  handleValidationChange("documents", isValid)
-                }
               />
+              {validationMessages.documents && (
+                <div style={{ color: "red" }}>
+                  {validationMessages.documents}
+                </div>
+              )}
 
               {/* SKUs Section */}
-              <SKUs
-                skus={skus}
-                onSkusChange={handleSkusChange}
-                onValidationChange={(isValid) =>
-                  handleValidationChange("skus", isValid)
-                }
-              />
+              <SKUs skus={skus} onSkusChange={handleSkusChange} />
+              {validationMessages.skus && (
+                <div style={{ color: "red" }}>{validationMessages.skus}</div>
+              )}
 
               {/* General Information Section */}
               <GeneralInformation
                 generalInfo={generalInfo}
                 onGeneralInfoChange={handleGeneralInfoChange}
-                onValidationChange={(isValid) =>
-                  handleValidationChange("generalInfo", isValid)
-                }
               />
+              {validationMessages.generalInfo && (
+                <div style={{ color: "red" }}>
+                  {validationMessages.generalInfo}
+                </div>
+              )}
 
               {/* Specifications & Properties Section */}
               <SpecificationsProperties
                 specifications={specifications}
                 onSpecificationsChange={handleSpecificationsChange}
-                onValidationChange={(isValid) =>
-                  handleValidationChange("specifications", isValid)
-                }
               />
 
               {/* Safety & Regulations Section */}
               <SafetyRegulations
                 safetyData={safetyData}
                 onSafetyDataChange={handleSafetyDataChange}
-                onValidationChange={(isValid) =>
-                  handleValidationChange("safetyData", isValid)
-                }
               />
 
               {/* Applications Section */}
               <Applications
                 applications={applications}
                 onApplicationsChange={handleApplicationsChange}
-                onValidationChange={(isValid) =>
-                  handleValidationChange("applications", isValid)
-                }
               />
+              {validationMessages.applications && (
+                <div style={{ color: "red" }}>
+                  {validationMessages.applications}
+                </div>
+              )}
 
               <div className="card bg-white rounded shadow p-4 mt-4">
                 <div className="col-md-12">
@@ -386,6 +457,27 @@ const AdminNewProduct = () => {
                   }}
                 >
                   {successMessage}
+                </div>
+              )}
+
+              {errorMessage && (
+                <div
+                  className="alert alert-danger mt-4 text-center"
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    position: "fixed",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    zIndex: 1000,
+                    width: "fit-content",
+                    padding: "1em",
+                    color: "#fff",
+                    backgroundColor: "bg-red", // Your desired background color
+                    borderRadius: "10px",
+                  }}
+                >
+                  {errorMessage}
                 </div>
               )}
             </form>

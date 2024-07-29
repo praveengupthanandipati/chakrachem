@@ -100,7 +100,7 @@ const SafetyRegulations = ({ safetyData, onSafetyDataChange }) => {
         <div className="col-md-12">
           <div className="mb-3">
             <label htmlFor="rtecs" className="form-label">
-              RTECS
+              RTECS#
             </label>
             <input
               className="form-control"

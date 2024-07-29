@@ -61,6 +61,7 @@ const SpecificationsProperties = ({
             <label htmlFor="appearance" className="form-label">
               Appearance
             </label>
+
             <input
               className="form-control"
               type="text"

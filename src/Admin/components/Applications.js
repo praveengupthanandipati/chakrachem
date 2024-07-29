@@ -10,31 +10,42 @@ const Applications = ({ applications, onApplicationsChange }) => {
     validateForm(newApplications);
   };
 
-  const handleFileChange = (e, index) => {
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        resolve(reader.result.split(',')[1]); // Return base64 without data URL prefix
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  const handleFileChange = async (e, index) => {
     const file = e.target.files[0];
     if (file) {
       if (file.type !== 'application/pdf') {
         alert('Only PDF files are allowed.');
         return;
       }
-
-      const reader = new FileReader();
-
-      reader.onload = () => {
+      try {
+        const base64 = await getBase64(file);
         const newApplications = [...applications];
-        const base64 = reader.result.split(',')[1]; // Base64 content
-        const fileName = file.name; // Extract file name
         newApplications[index] = {
           ...newApplications[index],
           fileContent: base64,
           fileType: file.type,
-          fileName: fileName,
+          fileName: file.name,
         };
         onApplicationsChange(newApplications);
         validateForm(newApplications);
-      };
-
-      reader.readAsDataURL(file); // Read as Data URL to get Base64 encoding
+      } catch (error) {
+        console.error('Error converting file to base64:', error);
+      }
     }
   };
 
@@ -57,6 +68,9 @@ const Applications = ({ applications, onApplicationsChange }) => {
   };
 
   const downloadFile = (fileContent, fileName, fileType) => {
+    // Ensure the file type is PDF
+    const mimeType = fileType || 'application/pdf';
+
     // Decode base64 and create a Blob
     const binaryString = window.atob(fileContent);
     const binaryLen = binaryString.length;
@@ -64,12 +78,12 @@ const Applications = ({ applications, onApplicationsChange }) => {
     for (let i = 0; i < binaryLen; i++) {
       bytes[i] = binaryString.charCodeAt(i);
     }
-    const blob = new Blob([bytes], { type: fileType });
-    
+    const blob = new Blob([bytes], { type: mimeType });
+
     // Create a temporary link and trigger the download
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = fileName || 'file.pdf'; // Default to 'file.pdf' if no name provided
+    link.download = (fileName || 'application') + (mimeType === 'application/pdf' ? '.pdf' : '');
     document.body.appendChild(link); // Required for Firefox
     link.click();
     document.body.removeChild(link); // Clean up
@@ -102,16 +116,31 @@ const Applications = ({ applications, onApplicationsChange }) => {
                 type="file"
                 onChange={(e) => handleFileChange(e, index)}
               />
-              {application.fileContent && (
+              {!application.applicationName && application.fileContent && (
                 <div>
-                  <span>{application.fileName}</span>
+                  <span>Name of the Application</span>
                   <button
                     type="button"
                     className="btn btn-link"
-                    onClick={() => downloadFile(application.fileContent, application.fileName, application.fileType)}
+                    onClick={() => downloadFile(application.fileContent, 'application', application.fileType)}
                   >
                     Download
                   </button>
+                </div>
+              )}
+
+              {application.applicationName && (
+                <div>
+                  <span>{application.applicationName}</span>
+                  {application.fileContent && (
+                    <button
+                      type="button"
+                      className="btn btn-link"
+                      onClick={() => downloadFile(application.fileContent, application.applicationName, application.fileType)}
+                    >
+                      Download
+                    </button>
+                  )}
                 </div>
               )}
             </div>
