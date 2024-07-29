@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-const SpecificationsProperties = ({ specifications, onSpecificationsChange }) => {
+const SpecificationsProperties = ({
+  specifications,
+  onSpecificationsChange,
+}) => {
   const [formErrors, setFormErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { id, type } = e.target;
     let newValue = e.target.value;
 
-    if (type === 'file') {
+    if (type === "file") {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
@@ -28,17 +31,16 @@ const SpecificationsProperties = ({ specifications, onSpecificationsChange }) =>
 
     setFormErrors({
       ...formErrors,
-      [`${id}Error`]: '',
+      [`${id}Error`]: "",
     });
   };
-
 
   const validateForm = (e) => {
     const { id, value } = e.target;
     let errors = {};
 
     if (!value) {
-      errors[`${id}Error`] = `${id.replace(/([A-Z])/g, ' $1')} is required`;
+      errors[`${id}Error`] = `${id.replace(/([A-Z])/g, " $1")} is required`;
     }
 
     setFormErrors({
@@ -57,16 +59,18 @@ const SpecificationsProperties = ({ specifications, onSpecificationsChange }) =>
         <div className="col-md-3">
           <div className="mb-3">
             <label htmlFor="appearance" className="form-label">
-              Appearance (Image)
+              Appearance
             </label>
             <input
               className="form-control"
-              type="file"
+              type="text"
               id="appearance"
-              accept="image/*"
+              placeholder="Appearance"
+              value={specifications.appearance}
               onChange={handleInputChange}
+              onBlur={validateForm}
             />
-            {formErrors.appearanceError && (
+            {formErrors.purityHPLCError && (
               <div className="text-danger">{formErrors.appearanceError}</div>
             )}
           </div>
